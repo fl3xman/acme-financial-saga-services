@@ -1,0 +1,14 @@
+server:
+  port: 3002
+
+---
+spring:
+  profiles:
+    include: actuator
+
+logging:
+  exchange:
+    allowHeaders: true
+  level:
+    org.acme.financial.accounts: DEBUG
+

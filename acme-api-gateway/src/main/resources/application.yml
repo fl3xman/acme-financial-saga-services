@@ -1,0 +1,23 @@
+server:
+  port: 3000
+
+---
+spring:
+  profiles:
+    include: actuator
+  cloud:
+    gateway:
+      routes:
+        - id: payment_route
+          uri: http://localhost:3001/
+          predicates:
+            - Path=/payments/**
+        - id: account_route
+          uri: http://localhost:3002/
+          predicates:
+            - Path=/accounts/**
+
+logging:
+  level:
+    org.acme.financial.api: DEBUG
+

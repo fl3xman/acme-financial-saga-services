@@ -1,0 +1,12 @@
+server:
+  port: 3001
+
+---
+spring:
+  profiles: default
+
+logging:
+  exchange:
+    allowHeaders: true
+  level:
+    org.acme.financial.payments: DEBUG
