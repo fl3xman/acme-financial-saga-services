@@ -1,6 +1,5 @@
 package org.acme.financial.accounts
 
-import org.acme.commons.logging.provideLogger
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
@@ -14,17 +13,7 @@ import org.springframework.boot.runApplication
     "org.acme.commons",
     "org.acme.financial.accounts"
 ])
-class FinancialAccountApplication {
-    companion object {
-
-        @JvmStatic
-        private val logger = provideLogger()
-    }
-
-    init {
-        logger.info("Account service initialized!")
-    }
-}
+class FinancialAccountApplication
 
 fun main(args: Array<String>) {
     runApplication<FinancialAccountApplication>(*args)
