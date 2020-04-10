@@ -4,12 +4,15 @@ springBoot {
 }
 
 dependencies {
-    implementation(project(":acme-commons"))
-    implementation("org.springframework.cloud:spring-cloud-starter-gateway") {
-        dependencyManagement {
-            imports {
-                mavenBom("org.springframework.cloud:spring-cloud-dependencies:Hoxton.SR3")
-            }
-        }
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
+
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.springframework.cloud:spring-cloud-starter-gateway")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:Hoxton.SR3")
     }
 }

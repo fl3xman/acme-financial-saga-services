@@ -12,9 +12,13 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class ExchangeLoggingConfiguration(
-    @Value("\${logging.exchange.excludedPatterns:@null}") private var excludedPatterns: String? = null,
-    @Value("\${logging.exchange.allowHeaders:@false}") private var allowHeaders: Boolean = false
+    @Value("\${logging.exchange.excludedPatterns:}") private var excludedPatterns: String? = null,
+    @Value("\${logging.exchange.allowHeaders:}") private var allowHeaders: Boolean = false
 ) {
     @Bean
-    fun exchangeLoggingFilter(): ExchangeLoggingFilter = ExchangeLoggingFilter(allowHeaders, excludedPatterns?.toRegex())
+    fun exchangeLoggingFilter(): ExchangeLoggingFilter =
+        ExchangeLoggingFilter(
+            allowHeaders,
+            excludedPatterns?.toRegex()
+        )
 }

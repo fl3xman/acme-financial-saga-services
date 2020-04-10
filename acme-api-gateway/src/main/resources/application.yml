@@ -1,19 +1,17 @@
 server:
-  port: 3000
+  port: ${PORT:3000}
 
----
 spring:
-  profiles:
-    include: actuator
+  profiles: default
   cloud:
     gateway:
       routes:
-        - id: payment_route
-          uri: http://localhost:3001/
+        - id: route_payment
+          uri: ${ROUTE_PAYMENT:http://localhost:3001/}
           predicates:
             - Path=/payments/**
-        - id: account_route
-          uri: http://localhost:3002/
+        - id: route_account
+          uri: ${ROUTE_ACCOUNT:http://localhost:3002/}
           predicates:
             - Path=/accounts/**
 

@@ -1,0 +1,6 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ${MANAGEMENT_WEB_INCLUDED:info,health,liquibase}
+

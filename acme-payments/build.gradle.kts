@@ -5,10 +5,9 @@ springBoot {
 
 dependencies {
     implementation(project(":acme-commons"))
+    implementation("org.liquibase:liquibase-core")
 
-    implementation("org.springframework.data:spring-data-r2dbc:1.1.0.RC1")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
+    runtimeOnly("com.h2database:h2:1.4.200")
 
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {

@@ -1,14 +1,19 @@
 server:
-  port: 3002
+  port: ${PORT:3000}
 
----
 spring:
   profiles:
-    include: actuator
-
+    include: actuator,logging
+  datasource:
+    url: jdbc:h2:mem:accountdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: account
+    password: account
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  liquibase:
+    change-log: classpath:db/changelog.yml
 logging:
-  exchange:
-    allowHeaders: true
   level:
     org.acme.financial.accounts: DEBUG
 

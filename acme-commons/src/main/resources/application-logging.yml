@@ -1,0 +1,4 @@
+logging:
+  exchange:
+    excludedPatterns: ${LOGGIN_EXCHANGE_EXCLUDEDPATTERNS:}
+    allowHeaders: true
