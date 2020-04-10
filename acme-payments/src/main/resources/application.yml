@@ -13,6 +13,17 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
   liquibase:
     change-log: classpath:db/changelog.yml
+  kafka:
+    consumer:
+      bootstrap-servers: ${KAFKA_SERVER:localhost:9092}
+      group-id: ${KAFKA_PAYMENT_GROUP_ID:payment_group_id}
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      bootstrap-servers: ${KAFKA_SERVER:localhost:9092}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
 logging:
   level:
     org.acme.financial.payments: DEBUG
