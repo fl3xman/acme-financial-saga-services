@@ -1,5 +1,6 @@
-package org.acme.commons.logging
+package org.acme.commons.logging.exchannge.filter
 
+import org.acme.commons.logging.provideLogger
 import org.springframework.http.HttpHeaders
 import org.springframework.http.server.reactive.ServerHttpRequest
 import org.springframework.http.server.reactive.ServerHttpResponse
@@ -38,13 +39,28 @@ class ExchangeLoggingFilter(
         if (!
             exchange.request.headers.containsKey(HttpHeaders.CONTENT_LENGTH) ||
             exchange.request.headers.contentLength == 0L) {
-            provideRequestLog(logger, exchange.request, allowLogHeaders)
+            provideRequestLog(
+                logger,
+                exchange.request,
+                allowLogHeaders
+            )
         }
 
         return chain.filter(object : ServerWebExchangeDecorator(exchange) {
 
-            override fun getRequest(): ServerHttpRequest = RequestLoggingInterceptor(super.getRequest(), logger, allowLogHeaders)
-            override fun getResponse(): ServerHttpResponse = ResponseLoggingInterceptor(super.getResponse(), logger, time, allowLogHeaders)
+            override fun getRequest(): ServerHttpRequest =
+                RequestLoggingInterceptor(
+                    super.getRequest(),
+                    logger,
+                    allowLogHeaders
+                )
+            override fun getResponse(): ServerHttpResponse =
+                ResponseLoggingInterceptor(
+                    super.getResponse(),
+                    logger,
+                    time,
+                    allowLogHeaders
+                )
 
         })
     }

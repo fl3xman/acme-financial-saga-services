@@ -5,6 +5,11 @@ spring:
   profiles: default
   cloud:
     gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
       routes:
         - id: route_payment
           uri: ${ROUTE_PAYMENT:http://localhost:3001/}

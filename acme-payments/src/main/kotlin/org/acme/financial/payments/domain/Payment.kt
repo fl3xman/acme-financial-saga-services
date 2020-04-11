@@ -1,5 +1,6 @@
 package org.acme.financial.payments.domain
 
+import org.acme.commons.domain.AggregateIdentity
 import java.util.*
 import javax.persistence.Id
 import javax.persistence.Entity
@@ -17,5 +18,5 @@ import javax.persistence.Table
 data class Payment(
     @Id
     @GeneratedValue(generator = "UUID")
-    val id: UUID
-)
+    override val id: UUID
+): AggregateIdentity<UUID>

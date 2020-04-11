@@ -1,5 +1,6 @@
-package org.acme.commons.logging
+package org.acme.commons.logging.exchannge.configuration
 
+import org.acme.commons.logging.exchannge.filter.ExchangeLoggingFilter
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

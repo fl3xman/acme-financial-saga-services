@@ -1,4 +1,4 @@
-package org.acme.commons.logging
+package org.acme.commons.logging.exchannge.filter
 
 import org.reactivestreams.Publisher
 import org.slf4j.Logger
@@ -31,7 +31,13 @@ internal class ResponseLoggingInterceptor(
                 Channels.newChannel(payloadStream).write(dataBuffer.asByteBuffer().asReadOnlyBuffer())
                 val payload: String = payloadStream.toByteArray().toString(Charsets.UTF_8)
 
-                provideResponseLog(logger, delegate, time, allowLogHeaders, payload)
+                provideResponseLog(
+                    logger,
+                    delegate,
+                    time,
+                    allowLogHeaders,
+                    payload
+                )
 
             } catch (e: IOException) {
                 e.printStackTrace()

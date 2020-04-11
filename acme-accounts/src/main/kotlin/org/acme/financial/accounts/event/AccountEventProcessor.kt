@@ -22,7 +22,6 @@ class AccountEventProcessor: ReadyEventHandler {
 
     @EventListener(ApplicationReadyEvent::class)
     override fun onReady() {
-
         logger.info("Account processor ready!")
     }
 }

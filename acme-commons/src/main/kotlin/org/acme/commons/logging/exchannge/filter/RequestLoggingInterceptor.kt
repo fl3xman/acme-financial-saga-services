@@ -1,4 +1,4 @@
-package org.acme.commons.logging
+package org.acme.commons.logging.exchannge.filter
 
 import org.slf4j.Logger
 import org.springframework.core.io.buffer.DataBuffer
@@ -24,7 +24,12 @@ internal class RequestLoggingInterceptor(delegate: ServerHttpRequest, private va
                     Channels.newChannel(payloadStream).write(dataBuffer.asByteBuffer().asReadOnlyBuffer())
                     val payload: String = payloadStream.toByteArray().toString(Charsets.UTF_8)
 
-                    provideRequestLog(logger, delegate, allowLogHeaders, payload)
+                    provideRequestLog(
+                        logger,
+                        delegate,
+                        allowLogHeaders,
+                        payload
+                    )
 
                 } catch (e: IOException) {
                     e.printStackTrace()
