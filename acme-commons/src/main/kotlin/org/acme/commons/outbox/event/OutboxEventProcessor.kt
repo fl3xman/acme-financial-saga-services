@@ -17,7 +17,7 @@ class OutboxEventProcessor(
     @Autowired private val outboxRepository: OutboxRepository
 ) {
     @EventListener
-    fun onCreate(event: OutboxEvent) {
+    fun onAppend(event: OutboxEvent) {
         outboxRepository.save(Outbox(event))
     }
 }

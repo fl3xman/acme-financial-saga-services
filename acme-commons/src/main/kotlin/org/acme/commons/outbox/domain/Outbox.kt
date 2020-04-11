@@ -1,9 +1,8 @@
 package org.acme.commons.outbox.domain
 
 import org.acme.commons.outbox.event.OutboxEvent
-import org.springframework.data.annotation.Id
-import java.util.*
 import javax.persistence.*
+import java.util.*
 
 /**
  *
