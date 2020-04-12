@@ -24,8 +24,8 @@ class OutboxServiceImp(
     @Autowired private val outboxEventProducer: OutboxEventProducer
 ): OutboxService {
 
-    override fun <T: AggregateIdentity<UUID>> publish(topic:String, event:String, payload: T) {
-        outboxEventProducer.publish(topic, event, payload)
+    override fun <T: AggregateIdentity<UUID>> execute(topic:String, event:String, payload: T) {
+        outboxEventProducer.publish(topic, event, payload) // TODO check TRX
     }
 
     override fun findAll(): Flux<OutboxDTO> = Flux.defer {

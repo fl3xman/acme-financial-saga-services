@@ -1,7 +1,6 @@
 package org.acme.commons.outbox.event
 
 import org.acme.commons.logging.provideLogger
-import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Component
  * @author fl3xman
  */
 
-@EnableScheduling
 @Component
 class OutboxEventScheduledRelay {
 

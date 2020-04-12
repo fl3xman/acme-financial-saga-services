@@ -18,6 +18,9 @@ dependencies {
     api("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     api("javax.money:money-api:1.0.3")
+    api("org.javamoney:moneta:1.3")
+    api("org.zalando:jackson-datatype-money:1.1.1")
+
     api("com.fasterxml.jackson.module:jackson-module-kotlin")
     api("io.projectreactor.kotlin:reactor-kotlin-extensions")
     api("io.projectreactor.kafka:reactor-kafka:1.2.2.RELEASE")

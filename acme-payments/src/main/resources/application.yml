@@ -11,6 +11,10 @@ spring:
     password: payment
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      jadira:
+        usertype:
+          autoRegisterUserTypes: true
   liquibase:
     change-log: classpath:db/changelog.yml
   kafka:

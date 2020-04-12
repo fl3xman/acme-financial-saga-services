@@ -1,7 +1,7 @@
 package org.acme.financial.payments.configuration
 
 import org.springframework.context.annotation.Configuration
-import org.springframework.web.reactive.config.EnableWebFlux
+import org.springframework.scheduling.annotation.EnableScheduling
 
 /**
  *
@@ -10,5 +10,5 @@ import org.springframework.web.reactive.config.EnableWebFlux
  */
 
 @Configuration
-@EnableWebFlux
-class WebConfiguration
+@EnableScheduling
+class SchedulerConfiguration

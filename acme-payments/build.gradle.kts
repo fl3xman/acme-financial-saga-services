@@ -7,6 +7,8 @@ dependencies {
     implementation(project(":acme-commons"))
     implementation("org.liquibase:liquibase-core")
 
+    implementation("org.jadira.usertype:usertype.core:7.0.0.CR1")
+
     runtimeOnly("com.h2database:h2:1.4.200")
 
     testImplementation("io.projectreactor:reactor-test")

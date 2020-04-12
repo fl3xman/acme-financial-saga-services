@@ -1,5 +1,6 @@
 package org.acme.commons.outbox.event
 
+import org.acme.commons.logging.provideLogger
 import org.acme.commons.outbox.domain.Outbox
 import org.acme.commons.outbox.repository.OutboxRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,8 +17,14 @@ import org.springframework.stereotype.Component
 class OutboxEventProcessor(
     @Autowired private val outboxRepository: OutboxRepository
 ) {
+    companion object {
+        @JvmStatic
+        private val logger = provideLogger()
+    }
+
     @EventListener
     fun onAppend(event: OutboxEvent) {
         outboxRepository.save(Outbox(event))
+        logger.info("Outbox event saved $event")
     }
 }

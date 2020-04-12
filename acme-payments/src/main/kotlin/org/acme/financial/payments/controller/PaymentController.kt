@@ -1,10 +1,14 @@
 package org.acme.financial.payments.controller
 
+import org.acme.financial.payments.command.PaymentCommand
 import org.acme.financial.payments.dto.PaymentDTO
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.acme.financial.payments.service.PaymentService
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
+import java.util.*
 
 /**
  *
@@ -14,8 +18,21 @@ import reactor.core.publisher.Flux
 
 @RestController
 @RequestMapping(PaymentRoute.ROOT)
-class PaymentController {
+class PaymentController(
+    @Autowired private val paymentService: PaymentService
+) {
+    @PostMapping
+    fun create(@Validated @RequestBody input: PaymentCommand.Transfer): Mono<PaymentDTO> {
+        return paymentService.create(input)
+    }
+
+    @GetMapping(path = [PaymentRoute.IDENTITY])
+    fun getPayment(@PathVariable id: UUID): Mono<PaymentDTO> {
+        return paymentService.getPayment(id)
+    }
 
     @GetMapping
-    fun getPayments(): Flux<PaymentDTO> = Flux.fromIterable(listOf(PaymentDTO(10L)))
+    fun getPayments(): Flux<PaymentDTO> {
+        return paymentService.getPayments()
+    }
 }
