@@ -4,10 +4,7 @@ import org.acme.commons.logging.provideLogger
 import org.springframework.http.HttpHeaders
 import org.springframework.http.server.reactive.ServerHttpRequest
 import org.springframework.http.server.reactive.ServerHttpResponse
-import org.springframework.web.server.ServerWebExchange
-import org.springframework.web.server.ServerWebExchangeDecorator
-import org.springframework.web.server.WebFilter
-import org.springframework.web.server.WebFilterChain
+import org.springframework.web.server.*
 import reactor.core.publisher.Mono
 
 /**
@@ -62,6 +59,13 @@ class ExchangeLoggingFilter(
                     allowLogHeaders
                 )
 
-        })
+        }).doOnError {
+            when (it) {
+                is ResponseStatusException -> provideResponseErrorLog(logger, it, time, allowLogHeaders)
+                else -> {
+                    logger.error("Unknown response exception: $it")
+                }
+            }
+        }
     }
 }

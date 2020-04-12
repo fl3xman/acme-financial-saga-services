@@ -20,6 +20,6 @@ class OutboxEventScheduledRelay {
 
     @Scheduled(fixedDelay = 5000, initialDelay = 5000)
     fun schedule() {
-        logger.info("Outbox event scheduled!")
+        // logger.info("Outbox event scheduled!")
     }
 }
