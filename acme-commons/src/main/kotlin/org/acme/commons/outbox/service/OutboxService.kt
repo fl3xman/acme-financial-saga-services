@@ -15,9 +15,17 @@ import java.util.*
 
 interface OutboxService {
 
-    fun findAll(): Flux<OutboxDTO>
+    fun flushById(id: UUID): Mono<Unit>
+    fun flushByAggregateId(id: UUID): Mono<Unit>
+    fun flushAll(): Mono<Unit>
+
+    fun deleteById(id: UUID): Mono<Unit>
+    fun deleteByAggregateId(id: UUID): Mono<Unit>
     fun deleteAll(): Mono<Unit>
 
-    fun <T: AggregateIdentity<UUID>> execute(command: OutboxCommand<T>) = execute(command.topic, command.event, command.payload)
-    fun <T: AggregateIdentity<UUID>> execute(topic:String, event:String, payload: T)
+    fun findByAggregateId(id: UUID): Mono<OutboxDTO>
+    fun findAll(): Flux<OutboxDTO>
+
+    fun <T : AggregateIdentity<UUID>> append(command: OutboxCommand<T>) = append(command.topic, command.payload)
+    fun <T : AggregateIdentity<UUID>> append(topic: String, payload: T)
 }

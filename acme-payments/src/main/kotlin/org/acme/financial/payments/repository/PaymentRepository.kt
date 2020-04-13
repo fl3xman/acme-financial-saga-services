@@ -12,5 +12,5 @@ import java.util.*
  */
 
 @Repository
-interface PaymentRepository: JpaRepository<Payment, UUID> {
+interface PaymentRepository : JpaRepository<Payment, UUID> {
 }

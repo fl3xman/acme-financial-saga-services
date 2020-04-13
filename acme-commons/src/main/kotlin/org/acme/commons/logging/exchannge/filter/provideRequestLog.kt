@@ -9,8 +9,13 @@ import org.springframework.http.server.reactive.ServerHttpRequest
  * @author fl3xman
  */
 
-internal fun provideRequestLog(logger: Logger, delegate: ServerHttpRequest, allowLogHeaders: Boolean, body: String? = null) {
-    val headers = if(allowLogHeaders) ", headers=${delegate.headers}" else ""
+internal fun provideRequestLog(
+    logger: Logger,
+    delegate: ServerHttpRequest,
+    allowLogHeaders: Boolean,
+    body: String? = null
+) {
+    val headers = if (allowLogHeaders) ", headers=${delegate.headers}" else ""
     val payload = body?.let { ", payload=$it" } ?: ""
 
     logger.info(

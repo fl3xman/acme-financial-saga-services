@@ -17,7 +17,7 @@ data class PaymentDTO(
     val currency: String,
     val status: PaymentStatus
 ) {
-    constructor(model: Payment): this(
+    constructor(model: Payment) : this(
         model.id,
         model.transaction.numberStripped,
         model.transaction.currency.currencyCode,

@@ -9,8 +9,14 @@ import org.springframework.http.server.reactive.ServerHttpResponse
  * @author fl3xman
  */
 
-internal fun provideResponseLog(logger: Logger, delegate: ServerHttpResponse, time: Long, allowLogHeaders: Boolean, body: String? = null) {
-    val headers = if(allowLogHeaders) ", headers=${delegate.headers}" else ""
+internal fun provideResponseLog(
+    logger: Logger,
+    delegate: ServerHttpResponse,
+    time: Long,
+    allowLogHeaders: Boolean,
+    body: String? = null
+) {
+    val headers = if (allowLogHeaders) ", headers=${delegate.headers}" else ""
     val payload = body?.let { ", payload=$it" } ?: ""
 
     logger.info(

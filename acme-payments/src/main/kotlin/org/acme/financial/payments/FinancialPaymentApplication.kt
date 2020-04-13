@@ -9,10 +9,12 @@ import org.springframework.boot.runApplication
  * @author fl3xman
  */
 
-@SpringBootApplication(scanBasePackages = [
-    "org.acme.commons",
-    "org.acme.financial.payments"
-])
+@SpringBootApplication(
+    scanBasePackages = [
+        "org.acme.commons",
+        "org.acme.financial.payments"
+    ]
+)
 class FinancialPaymentApplication
 
 fun main(args: Array<String>) {

@@ -7,7 +7,6 @@ package org.acme.commons.money.validator.annotation
  */
 
 import org.acme.commons.money.validator.CurrencyValidator
-import javax.money.CurrencyUnit
 import javax.validation.Constraint
 import javax.validation.Payload
 import kotlin.reflect.KClass

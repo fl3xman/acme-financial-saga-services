@@ -9,9 +9,11 @@ import org.springframework.boot.runApplication
  * @author fl3xman
  */
 
-@SpringBootApplication(scanBasePackages = [
-    "org.acme.financial.api"
-])
+@SpringBootApplication(
+    scanBasePackages = [
+        "org.acme.financial.api"
+    ]
+)
 class FinancialApiGatewayApplication
 
 fun main(args: Array<String>) {

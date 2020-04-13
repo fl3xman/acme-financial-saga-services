@@ -1,6 +1,5 @@
 package org.acme.financial.accounts.event
 
-import org.acme.commons.event.ReadyEventHandler
 import org.acme.commons.logging.provideLogger
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Component
  */
 
 @Component
-class AccountEventProcessor: ReadyEventHandler {
+class AccountEventProcessor {
 
     companion object {
         @JvmStatic
@@ -21,7 +20,7 @@ class AccountEventProcessor: ReadyEventHandler {
     }
 
     @EventListener(ApplicationReadyEvent::class)
-    override fun onReady() {
+    fun onReady() {
         logger.info("Account processor ready!")
     }
 }

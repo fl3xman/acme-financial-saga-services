@@ -12,5 +12,7 @@ import java.util.*
  */
 
 @Repository
-interface OutboxRepository: JpaRepository<Outbox, UUID> {
+interface OutboxRepository : JpaRepository<Outbox, UUID> {
+    fun findByAggregateId(aggregateId: UUID): Outbox?
+    fun deleteByAggregateId(aggregateId: UUID)
 }

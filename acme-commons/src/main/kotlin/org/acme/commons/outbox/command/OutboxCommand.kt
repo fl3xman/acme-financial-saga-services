@@ -9,8 +9,7 @@ import java.util.*
  * @author fl3xman
  */
 
-interface OutboxCommand<T: AggregateIdentity<UUID>> {
+interface OutboxCommand<T : AggregateIdentity<UUID>> {
     val topic: String
-    val event: String
     val payload: T
 }

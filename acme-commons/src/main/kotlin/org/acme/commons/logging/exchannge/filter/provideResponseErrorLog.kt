@@ -9,8 +9,13 @@ import org.springframework.web.server.ResponseStatusException
  * @author fl3xman
  */
 
-internal fun provideResponseErrorLog(logger: Logger, exception: ResponseStatusException, time: Long, allowLogHeaders: Boolean) {
-    val headers = if(allowLogHeaders) ", headers=${exception.responseHeaders}" else ""
+internal fun provideResponseErrorLog(
+    logger: Logger,
+    exception: ResponseStatusException,
+    time: Long,
+    allowLogHeaders: Boolean
+) {
+    val headers = if (allowLogHeaders) ", headers=${exception.responseHeaders}" else ""
     val payload = exception.cause?.let { ", payload=$it" } ?: ""
 
     logger.info(

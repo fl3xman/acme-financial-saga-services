@@ -1,10 +1,9 @@
 package org.acme.commons.outbox.event
 
 import org.acme.commons.logging.provideLogger
-import org.acme.commons.outbox.domain.Outbox
-import org.acme.commons.outbox.repository.OutboxRepository
+import org.acme.commons.outbox.service.OutboxService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.event.EventListener
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 
 /**
@@ -15,16 +14,21 @@ import org.springframework.stereotype.Component
 
 @Component
 class OutboxEventProcessor(
-    @Autowired private val outboxRepository: OutboxRepository
+    @Autowired private val outboxService: OutboxService
 ) {
+
     companion object {
         @JvmStatic
         private val logger = provideLogger()
     }
 
-    @EventListener
-    fun onAppend(event: OutboxEvent) {
-        outboxRepository.save(Outbox(event))
-        logger.info("Outbox event saved $event")
+    @Scheduled(fixedDelay = 5000, initialDelay = 5000)
+    fun schedule() {
+        /*
+        outboxService.flushAll().doOnError {
+            logger.error("Outbox event flush failed with error: $it")
+        }.subscribe()
+
+         */
     }
 }

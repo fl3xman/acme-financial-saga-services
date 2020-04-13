@@ -6,6 +6,6 @@ package org.acme.commons.domain
  * @author fl3xman
  */
 
-interface AggregateIdentity<ID> {
-    val aggregateId: ID
+interface Identity<ID> {
+    val id: ID
 }

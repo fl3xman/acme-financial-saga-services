@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono
 class ExchangeLoggingFilter(
     private val allowLogHeaders: Boolean = false,
     private val excludedPatterns: Regex? = null
-): WebFilter {
+) : WebFilter {
 
     companion object {
         @JvmStatic
@@ -35,7 +35,8 @@ class ExchangeLoggingFilter(
 
         if (!
             exchange.request.headers.containsKey(HttpHeaders.CONTENT_LENGTH) ||
-            exchange.request.headers.contentLength == 0L) {
+            exchange.request.headers.contentLength == 0L
+        ) {
             provideRequestLog(
                 logger,
                 exchange.request,
@@ -51,6 +52,7 @@ class ExchangeLoggingFilter(
                     logger,
                     allowLogHeaders
                 )
+
             override fun getResponse(): ServerHttpResponse =
                 ResponseLoggingInterceptor(
                     super.getResponse(),

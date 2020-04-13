@@ -13,6 +13,6 @@ sealed class PaymentOutboxCommand(
     override val topic: String,
     override val event: String,
     override val payload: Payment
-): OutboxCommand<Payment> {
-    class Create(payment: Payment): PaymentOutboxCommand("", "", payment)
+) : OutboxCommand<Payment> {
+    class Create(payment: Payment) : PaymentOutboxCommand("", "", payment)
 }

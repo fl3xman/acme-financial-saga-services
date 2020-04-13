@@ -22,7 +22,7 @@ internal class ResponseLoggingInterceptor(
     private val logger: Logger,
     private val time: Long,
     private val allowLogHeaders: Boolean = false
-): ServerHttpResponseDecorator(delegate) {
+) : ServerHttpResponseDecorator(delegate) {
 
     override fun writeWith(body: Publisher<out DataBuffer>): Mono<Void> = super.writeWith(Flux.from(body)
         .doOnNext { dataBuffer ->

@@ -15,30 +15,34 @@ import java.nio.channels.Channels
  * @author fl3xman
  */
 
-internal class RequestLoggingInterceptor(delegate: ServerHttpRequest, private val logger: Logger, private val allowLogHeaders: Boolean = false): ServerHttpRequestDecorator(delegate) {
+internal class RequestLoggingInterceptor(
+    delegate: ServerHttpRequest,
+    private val logger: Logger,
+    private val allowLogHeaders: Boolean = false
+) : ServerHttpRequestDecorator(delegate) {
 
     override fun getBody(): Flux<DataBuffer> = super.getBody()
-            .doOnNext { dataBuffer: DataBuffer ->
-                val payloadStream = ByteArrayOutputStream()
+        .doOnNext { dataBuffer: DataBuffer ->
+            val payloadStream = ByteArrayOutputStream()
+            try {
+                Channels.newChannel(payloadStream).write(dataBuffer.asByteBuffer().asReadOnlyBuffer())
+                val payload: String = payloadStream.toByteArray().toString(Charsets.UTF_8)
+
+                provideRequestLog(
+                    logger,
+                    delegate,
+                    allowLogHeaders,
+                    payload
+                )
+
+            } catch (e: IOException) {
+                e.printStackTrace()
+            } finally {
                 try {
-                    Channels.newChannel(payloadStream).write(dataBuffer.asByteBuffer().asReadOnlyBuffer())
-                    val payload: String = payloadStream.toByteArray().toString(Charsets.UTF_8)
-
-                    provideRequestLog(
-                        logger,
-                        delegate,
-                        allowLogHeaders,
-                        payload
-                    )
-
+                    payloadStream.close()
                 } catch (e: IOException) {
                     e.printStackTrace()
-                } finally {
-                    try {
-                        payloadStream.close()
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
                 }
             }
+        }
 }

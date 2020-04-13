@@ -13,12 +13,16 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = [
-    "org.acme.commons",
-    "org.acme.financial.accounts"
-])
-@EntityScan(basePackages = [
-    "org.acme.commons",
-    "org.acme.financial.accounts"
-])
+@EnableJpaRepositories(
+    basePackages = [
+        "org.acme.commons",
+        "org.acme.financial.accounts"
+    ]
+)
+@EntityScan(
+    basePackages = [
+        "org.acme.commons",
+        "org.acme.financial.accounts"
+    ]
+)
 class EntityConfiguration

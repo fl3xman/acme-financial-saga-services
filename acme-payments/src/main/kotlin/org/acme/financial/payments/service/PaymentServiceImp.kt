@@ -2,7 +2,6 @@ package org.acme.financial.payments.service
 
 import org.acme.commons.outbox.service.OutboxService
 import org.acme.financial.payments.command.PaymentCommand
-import org.acme.financial.payments.command.PaymentOutboxCommand
 import org.acme.financial.payments.domain.Payment
 import org.acme.financial.payments.dto.PaymentDTO
 import org.acme.financial.payments.repository.PaymentRepository
@@ -27,18 +26,16 @@ import javax.persistence.EntityNotFoundException
 class PaymentServiceImp(
     @Autowired private val paymentRepository: PaymentRepository,
     @Autowired private val outboxService: OutboxService
-): PaymentService {
+) : PaymentService {
 
     override fun create(input: PaymentCommand): Mono<PaymentDTO> = Mono.defer {
         execute(input).toMono().map { PaymentDTO(it) }
     }
 
     override fun getPayment(id: UUID): Mono<PaymentDTO> = Mono.defer {
-        paymentRepository.findById(id).toMono().map {
-            PaymentDTO(it.orElseThrow {
-                    throw EntityNotFoundException()
-                })
-        }
+        paymentRepository.findByIdOrNull(id)?.let {
+            PaymentDTO(it)
+        }?.toMono() ?: throw EntityNotFoundException()
     }
 
     override fun getPayments(): Flux<PaymentDTO> {
@@ -48,7 +45,7 @@ class PaymentServiceImp(
     @Transactional
     private fun execute(input: PaymentCommand): Payment {
         return paymentRepository.save(input.payment).also {
-            outboxService.execute(PaymentOutboxCommand.Create(it))
+            //outboxService.execute(PaymentOutboxCommand.Create(it))
         }
     }
 }

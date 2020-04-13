@@ -1,8 +1,9 @@
 package org.acme.commons.outbox.domain
 
-import org.acme.commons.outbox.event.OutboxEvent
-import javax.persistence.*
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.acme.commons.domain.AggregateIdentity
 import java.util.*
+import javax.persistence.*
 
 /**
  *
@@ -15,15 +16,14 @@ import java.util.*
 data class Outbox(
     @Id
     @GeneratedValue(generator = "UUID")
-    val id: UUID,
+    var id: UUID? = null,
 
     @Column(name = "aggregate_id")
     val aggregateId: UUID,
     val topic: String,
-    val event: String,
     val payload: String
 ) {
-    constructor(event: OutboxEvent): this(
-        UUID.randomUUID(), event.aggregateId, event.topic, event.event, event.payload
+    constructor(topic: String, payload: AggregateIdentity<UUID>, objectMapper: ObjectMapper) : this(
+        topic = topic, aggregateId = payload.aggregateId, payload = objectMapper.writeValueAsString(payload)
     )
 }

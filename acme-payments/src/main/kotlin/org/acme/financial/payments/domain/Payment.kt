@@ -1,7 +1,6 @@
 package org.acme.financial.payments.domain
 
 import org.acme.commons.domain.AggregateIdentity
-import org.acme.financial.payments.command.PaymentCommand
 import org.hibernate.annotations.Columns
 import org.hibernate.annotations.Type
 import org.javamoney.moneta.Money
@@ -21,11 +20,13 @@ data class Payment(
     @GeneratedValue(generator = "UUID")
     override val id: UUID,
 
-    @Columns(columns = [
-        Column(name = "transaction_currency"),
-        Column(name = "transaction_amount")
-    ])
+    @Columns(
+        columns = [
+            Column(name = "transaction_currency"),
+            Column(name = "transaction_amount")
+        ]
+    )
     @Type(type = "org.jadira.usertype.moneyandcurrency.moneta.PersistentMoneyAmountAndCurrency")
     val transaction: Money,
     val status: PaymentStatus = PaymentStatus.PENDING
-): AggregateIdentity<UUID>
+) : AggregateIdentity<UUID>

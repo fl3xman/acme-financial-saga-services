@@ -13,7 +13,7 @@ import javax.validation.ConstraintValidatorContext
  * @author fl3xman
  */
 
-class CurrencyValidator: ConstraintValidator<Currency, String> {
+class CurrencyValidator : ConstraintValidator<Currency, String> {
 
     companion object {
         @JvmStatic
@@ -33,7 +33,7 @@ class CurrencyValidator: ConstraintValidator<Currency, String> {
             try {
                 return currencies.contains(Monetary.getCurrency(it))
             } catch (exception: Throwable) {
-                logger.debug("Value: $value validation failed with error: $exception")
+                logger.debug("Validation failed value=$value, error=$exception")
                 false
             }
         } ?: false
