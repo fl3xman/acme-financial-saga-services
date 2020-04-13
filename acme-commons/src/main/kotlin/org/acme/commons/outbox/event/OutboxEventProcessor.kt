@@ -24,11 +24,8 @@ class OutboxEventProcessor(
 
     @Scheduled(fixedDelay = 5000, initialDelay = 5000)
     fun schedule() {
-        /*
         outboxService.flushAll().doOnError {
             logger.error("Outbox event flush failed with error: $it")
         }.subscribe()
-
-         */
     }
 }

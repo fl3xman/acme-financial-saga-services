@@ -18,7 +18,10 @@ import javax.persistence.*
 data class Payment(
     @Id
     @GeneratedValue(generator = "UUID")
-    override val id: UUID,
+    var id: UUID? = null,
+
+    @Column(name = "account_id")
+    var accountId: UUID? = null,
 
     @Columns(
         columns = [
@@ -28,5 +31,16 @@ data class Payment(
     )
     @Type(type = "org.jadira.usertype.moneyandcurrency.moneta.PersistentMoneyAmountAndCurrency")
     val transaction: Money,
+
+    @Embedded
+    @AttributeOverrides(value = [
+        AttributeOverride(name = "value", column = Column(name = "beneficiary_value")),
+        AttributeOverride(name = "type", column = Column(name = "beneficiary_type"))
+    ])
+    val beneficiary: Beneficiary,
     val status: PaymentStatus = PaymentStatus.PENDING
-) : AggregateIdentity<UUID>
+
+) : AggregateIdentity<UUID> {
+    override val aggregateId: UUID
+        get() = accountId!!
+}

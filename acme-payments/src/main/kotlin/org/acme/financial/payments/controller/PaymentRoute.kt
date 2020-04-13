@@ -8,5 +8,6 @@ package org.acme.financial.payments.controller
 
 object PaymentRoute {
     const val ROOT = "/payments"
+    const val TRANSFER_IBAN = "/payments/iban"
     const val IDENTITY = "/{id}"
 }

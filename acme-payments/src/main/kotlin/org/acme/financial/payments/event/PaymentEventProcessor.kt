@@ -21,7 +21,6 @@ class PaymentEventProcessor {
 
     @EventListener(ApplicationReadyEvent::class)
     fun onReady() {
-
         logger.info("Payment processor ready!")
     }
 }

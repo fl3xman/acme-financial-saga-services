@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import java.security.Principal
 import java.util.*
 
 /**
@@ -21,18 +22,20 @@ import java.util.*
 class PaymentController(
     @Autowired private val paymentService: PaymentService
 ) {
-    @PostMapping
-    fun create(@Validated @RequestBody input: PaymentCommand.Transfer): Mono<PaymentDTO> {
-        return paymentService.create(input)
+    @PostMapping(path = [PaymentRoute.TRANSFER_IBAN])
+    fun transferUsingIBAN(
+        @Validated @RequestBody input: PaymentCommand.TransferUsingIBAN, principal: Principal
+    ): Mono<PaymentDTO> {
+        return paymentService.create(input, principal)
     }
 
     @GetMapping(path = [PaymentRoute.IDENTITY])
-    fun getPayment(@PathVariable id: UUID): Mono<PaymentDTO> {
-        return paymentService.getPayment(id)
+    fun getPayment(@PathVariable id: UUID, principal: Principal): Mono<PaymentDTO> {
+        return paymentService.getPayment(id, principal)
     }
 
     @GetMapping
-    fun getPayments(): Flux<PaymentDTO> {
-        return paymentService.getPayments()
+    fun getPayments(principal: Principal): Flux<PaymentDTO> {
+        return paymentService.getPayments(principal)
     }
 }

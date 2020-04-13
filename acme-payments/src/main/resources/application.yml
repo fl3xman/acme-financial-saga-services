@@ -28,6 +28,13 @@ spring:
       bootstrap-servers: ${KAFKA_SERVER:localhost:9092}
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
 logging:
   level:
     org.acme.financial.payments: DEBUG
+
+acme:
+  payment:
+    topics:
+      payment-transaction-started: ${ACME_PAYMENT_TRX_STARTED_TOPIC:payment-transaction-started-topic}
+      payment-transaction-completed: ${ACME_PAYMENT_TRX_COMPLETED_TOPIC:payment-transaction-completed-topic}

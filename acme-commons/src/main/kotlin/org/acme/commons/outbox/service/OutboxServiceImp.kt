@@ -35,15 +35,25 @@ class OutboxServiceImp(
     }
 
     override fun flushById(id: UUID): Mono<Unit> = Mono.defer {
-        processById(id).toMono()
+        outboxRepository.findByIdOrNull(id)?.let {
+            messageService
+                .send(OutboxDTO(it))
+                .doOnNext { result ->
+                    result.getOrNull()?.let { id ->
+                        outboxRepository.deleteById(id)
+                    }
+                }.map { Unit }
+        } ?: Mono.error(EntityNotFoundException())
     }
 
-    override fun flushByAggregateId(id: UUID): Mono<Unit> = Mono.defer {
-        processByAggregateId(id).toMono()
-    }
-
-    override fun flushAll(): Mono<Unit> = Mono.defer {
-        processAll().toMono()
+    override fun flushAll(): Flux<Unit> = Flux.defer {
+        messageService
+            .bulkSend(outboxRepository.findAll().map { OutboxDTO(it) })
+            .doOnNext { result ->
+                result.getOrNull()?.let { id ->
+                    outboxRepository.deleteById(id)
+                }
+            }.map { Unit }
     }
 
     override fun deleteAll(): Mono<Unit> = Mono.defer {
@@ -54,41 +64,7 @@ class OutboxServiceImp(
         outboxRepository.deleteById(id).toMono()
     }
 
-    override fun deleteByAggregateId(id: UUID): Mono<Unit> = Mono.defer {
-        outboxRepository.deleteByAggregateId(id).toMono()
-    }
-
-    override fun findByAggregateId(id: UUID): Mono<OutboxDTO> = Mono.defer {
-        outboxRepository.findByAggregateId(id)?.let {
-            OutboxDTO(it)
-        }?.toMono() ?: throw EntityNotFoundException()
-    }
-
     override fun findAll(): Flux<OutboxDTO> = Flux.defer {
         outboxRepository.findAll().map { OutboxDTO(it) }.toFlux()
-    }
-
-    internal fun processById(id: UUID) {
-        val outbox = outboxRepository.findByIdOrNull(id)
-        outbox?.let {
-            messageService.send(OutboxDTO(it))
-            outboxRepository.delete(it)
-        } ?: throw EntityNotFoundException()
-    }
-
-    internal fun processByAggregateId(id: UUID) {
-        val outbox = outboxRepository.findByAggregateId(id)
-        outbox?.let {
-            messageService.send(OutboxDTO(it))
-            outboxRepository.delete(it)
-        } ?: throw EntityNotFoundException()
-    }
-
-    @Transactional
-    internal fun processAll() {
-        val results = outboxRepository.findAll()
-
-        messageService.bulkSend(results.map { OutboxDTO(it) })
-        outboxRepository.deleteInBatch(results)
     }
 }
