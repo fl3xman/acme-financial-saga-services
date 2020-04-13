@@ -20,7 +20,7 @@ import java.util.*
  * @author fl3xman
  */
 
-class KafkaProducerService(
+class KafkaMessageService(
     @Autowired private val kafkaTemplate: KafkaTemplate<String, String>,
     @Autowired private val kafkaProducerTemplate: ReactiveKafkaProducerTemplate<String, String>
 ) : MessageService {

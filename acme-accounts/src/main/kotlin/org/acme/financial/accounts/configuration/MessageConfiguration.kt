@@ -1,6 +1,6 @@
 package org.acme.financial.accounts.configuration
 
-import org.acme.commons.kafka.service.KafkaProducerService
+import org.acme.commons.kafka.service.KafkaMessageService
 import org.acme.commons.message.service.MessageService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -20,5 +20,5 @@ class MessageConfiguration {
     fun messageService(
         kafkaTemplate: KafkaTemplate<String, String>,
         kafkaProducerTemplate: ReactiveKafkaProducerTemplate<String, String>
-    ): MessageService = KafkaProducerService(kafkaTemplate, kafkaProducerTemplate)
+    ): MessageService = KafkaMessageService(kafkaTemplate, kafkaProducerTemplate)
 }
