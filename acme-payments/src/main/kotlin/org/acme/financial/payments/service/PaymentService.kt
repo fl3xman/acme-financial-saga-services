@@ -12,8 +12,8 @@ import java.util.*
  * @author fl3xman
  */
 interface PaymentService {
-    fun create(input: PaymentCommand, accountId: UUID?): Mono<PaymentDTO>
+    fun create(input: PaymentCommand, accountId: UUID): Mono<PaymentDTO>
 
-    fun getPayment(id: UUID): Mono<PaymentDTO>
-    fun getPayments(): Flux<PaymentDTO>
+    fun getPayment(id: UUID, accountId: UUID): Mono<PaymentDTO>
+    fun getPayments(accountId: UUID): Flux<PaymentDTO>
 }

@@ -4,6 +4,7 @@ import org.acme.commons.outbox.service.OutboxService
 import org.acme.financial.payments.command.PaymentCommand
 import org.acme.financial.payments.domain.Payment
 import org.acme.financial.payments.dto.PaymentDTO
+import org.acme.financial.payments.exception.PaymentNotFoundException
 import org.acme.financial.payments.repository.PaymentRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -30,28 +31,26 @@ class PaymentServiceImp(
     @Value("\${acme.payment.topics.payment-transaction-started}") private val topic: String
 ) : PaymentService {
 
-    override fun create(input: PaymentCommand, accountId: UUID?): Mono<PaymentDTO> = Mono.defer {
+    override fun create(input: PaymentCommand, accountId: UUID): Mono<PaymentDTO> = Mono.defer {
         createWithOutbox(input, accountId).toMono().map { PaymentDTO(it) }
     }
 
-    override fun getPayment(id: UUID): Mono<PaymentDTO> = Mono.defer {
-        paymentRepository.findByIdOrNull(id)?.let {
+    override fun getPayment(id: UUID, accountId: UUID): Mono<PaymentDTO> = Mono.defer {
+        paymentRepository.findOneByIdAndAccountId(id, accountId)?.let {
             PaymentDTO(it)
-        }?.toMono() ?: Mono.error(EntityNotFoundException())
+        }?.toMono() ?: Mono.error(PaymentNotFoundException("Payment for id=$id does not exist!"))
     }
 
-    override fun getPayments(): Flux<PaymentDTO> {
-        return paymentRepository.findAll().map { PaymentDTO(it) }.toFlux()
+    override fun getPayments(accountId: UUID): Flux<PaymentDTO> {
+        return paymentRepository.findAllByAccountId(accountId).map { PaymentDTO(it) }.toFlux()
     }
 
     @Transactional
-    fun createWithOutbox(input: PaymentCommand, accountId: UUID?): Payment {
-        return accountId?.let {
-            val payment = paymentRepository.save(input.withAccountId(it).payment)
+    fun createWithOutbox(input: PaymentCommand, accountId: UUID): Payment {
+        val payment = paymentRepository.save(input.withAccountId(accountId).payment)
 
-            outboxService.append(topic, payment)
-            return payment
-        } ?: throw EntityNotFoundException()
+        outboxService.append(topic, payment)
+        return payment
     }
 }
 

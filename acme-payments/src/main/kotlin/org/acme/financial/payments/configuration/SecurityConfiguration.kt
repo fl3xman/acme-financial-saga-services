@@ -31,7 +31,6 @@ class SecurityConfiguration(
     @Value("\${acme.payment.security.user.password}") private val password: String,
     @Value("\${acme.payment.security.user.role}") private val role: String
 ) {
-
     @Bean
     fun springSecurityFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain =
         http.formLogin().disable()

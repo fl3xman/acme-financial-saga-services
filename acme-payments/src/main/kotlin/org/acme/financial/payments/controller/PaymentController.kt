@@ -1,6 +1,6 @@
 package org.acme.financial.payments.controller
 
-import org.acme.commons.security.AccountIdentityAware
+import org.acme.commons.security.provideAccountIdentity
 import org.acme.financial.payments.command.PaymentCommand
 import org.acme.financial.payments.dto.PaymentDTO
 import org.acme.financial.payments.service.PaymentService
@@ -27,16 +27,16 @@ class PaymentController(
     fun transferUsingIBAN(
         @Validated @RequestBody input: PaymentCommand.TransferUsingIBAN, auth: Authentication
     ): Mono<PaymentDTO> {
-        return paymentService.create(input, (auth.principal as? AccountIdentityAware<UUID>)?.accountId)
+        return paymentService.create(input, provideAccountIdentity(auth))
     }
 
     @GetMapping(path = [PaymentRoute.IDENTITY])
-    fun getPayment(@PathVariable id: UUID): Mono<PaymentDTO> {
-        return paymentService.getPayment(id)
+    fun getPayment(@PathVariable id: UUID, auth: Authentication): Mono<PaymentDTO> {
+        return paymentService.getPayment(id, provideAccountIdentity(auth))
     }
 
     @GetMapping
-    fun getPayments(): Flux<PaymentDTO> {
-        return paymentService.getPayments()
+    fun getPayments(auth: Authentication): Flux<PaymentDTO> {
+        return paymentService.getPayments(provideAccountIdentity(auth))
     }
 }

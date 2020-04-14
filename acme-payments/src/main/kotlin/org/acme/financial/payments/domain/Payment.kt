@@ -16,7 +16,6 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "payment")
-@Where(clause = "account_id=?#{principal.accountId}")
 data class Payment(
     @Id
     @GeneratedValue(generator = "UUID")
