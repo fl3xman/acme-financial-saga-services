@@ -43,8 +43,8 @@ class PaymentServiceImp(
         }?.toMono() ?: Mono.error(PaymentNotFoundException("Payment for id=$id does not exist!"))
     }
 
-    override fun getPayments(accountId: UUID): Flux<PaymentDTO> {
-        return paymentRepository.findAllByAccountId(accountId).map { PaymentDTO(it) }.toFlux()
+    override fun getPayments(accountId: UUID): Flux<PaymentDTO> = Flux.defer {
+        paymentRepository.findAllByAccountId(accountId).map { PaymentDTO(it) }.toFlux()
     }
 
     private fun createWithOutbox(input: PaymentCommand, accountId: UUID): Payment? {
