@@ -24,7 +24,6 @@ import java.util.*
 
 @Configuration
 @EnableWebFluxSecurity
-@EnableReactiveMethodSecurity
 class SecurityConfiguration(
     @Value("\${acme.payment.security.user.account-id}") private val accountId: String,
     @Value("\${acme.payment.security.user.username}") private val username: String,
