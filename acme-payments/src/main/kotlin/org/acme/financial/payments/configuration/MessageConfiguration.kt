@@ -21,9 +21,10 @@ import reactor.kafka.sender.SenderOptions
 class MessageConfiguration {
 
     @Bean
-    fun producerFactory(kafkaProperties: KafkaProperties): ProducerFactory<String, String> = DefaultKafkaProducerFactory(
-        kafkaProperties.buildProducerProperties()
-    )
+    fun producerFactory(kafkaProperties: KafkaProperties): ProducerFactory<String, String> =
+        DefaultKafkaProducerFactory(
+            kafkaProperties.buildProducerProperties()
+        )
 
     @Bean
     fun kafkaTemplate(kafkaProperties: KafkaProperties): KafkaTemplate<String, String> = KafkaTemplate(
@@ -31,9 +32,10 @@ class MessageConfiguration {
     )
 
     @Bean
-    fun kafkaProducerTemplate(kafkaProperties: KafkaProperties): ReactiveKafkaProducerTemplate<String, String> = ReactiveKafkaProducerTemplate(
-        SenderOptions.create(kafkaProperties.buildProducerProperties())
-    )
+    fun kafkaProducerTemplate(kafkaProperties: KafkaProperties): ReactiveKafkaProducerTemplate<String, String> =
+        ReactiveKafkaProducerTemplate(
+            SenderOptions.create(kafkaProperties.buildProducerProperties())
+        )
 
     @Bean
     fun messageService(

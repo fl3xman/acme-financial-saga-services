@@ -14,7 +14,6 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toFlux
 import reactor.kotlin.core.publisher.toMono
-import java.security.Principal
 import java.util.*
 import javax.persistence.EntityNotFoundException
 
@@ -31,26 +30,28 @@ class PaymentServiceImp(
     @Value("\${acme.payment.topics.payment-transaction-started}") private val topic: String
 ) : PaymentService {
 
-    override fun create(input: PaymentCommand, principal: Principal): Mono<PaymentDTO> = Mono.defer {
-        createWithOutbox(input, principal).toMono().map { PaymentDTO(it) }
+    override fun create(input: PaymentCommand, accountId: UUID?): Mono<PaymentDTO> = Mono.defer {
+        createWithOutbox(input, accountId).toMono().map { PaymentDTO(it) }
     }
 
-    override fun getPayment(id: UUID, principal: Principal): Mono<PaymentDTO> = Mono.defer {
+    override fun getPayment(id: UUID): Mono<PaymentDTO> = Mono.defer {
         paymentRepository.findByIdOrNull(id)?.let {
             PaymentDTO(it)
         }?.toMono() ?: Mono.error(EntityNotFoundException())
     }
 
-    override fun getPayments(principal: Principal): Flux<PaymentDTO> {
-        return paymentRepository.findAll().toFlux().map { PaymentDTO(it) }
+    override fun getPayments(): Flux<PaymentDTO> {
+        return paymentRepository.findAll().map { PaymentDTO(it) }.toFlux()
     }
 
     @Transactional
-    fun createWithOutbox(input: PaymentCommand, principal: Principal): Payment {
-        val payment = paymentRepository.save(input.withPrincipal(principal).payment)
+    fun createWithOutbox(input: PaymentCommand, accountId: UUID?): Payment {
+        return accountId?.let {
+            val payment = paymentRepository.save(input.withAccountId(it).payment)
 
-        outboxService.append(topic, payment)
-        return payment
+            outboxService.append(topic, payment)
+            return payment
+        } ?: throw EntityNotFoundException()
     }
 }
 

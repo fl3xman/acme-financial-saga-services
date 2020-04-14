@@ -6,7 +6,6 @@ import org.acme.financial.payments.domain.Beneficiary
 import org.acme.financial.payments.domain.Payment
 import org.javamoney.moneta.Money
 import java.math.BigDecimal
-import java.security.Principal
 import java.util.*
 import javax.validation.constraints.DecimalMin
 import javax.validation.constraints.Digits
@@ -20,9 +19,9 @@ import javax.validation.constraints.Digits
 sealed class PaymentCommand(
     val payment: Payment
 ) {
-    // Fixme: decimal validations
     data class TransferUsingIBAN(
 
+        // Fixme: decimal validations not working
         @DecimalMin(value = "0.01")
         @Digits(integer = 9, fraction = 2)
         private val amount: BigDecimal,
@@ -40,7 +39,7 @@ sealed class PaymentCommand(
         )
     )
 
-    fun withPrincipal(principal: Principal): PaymentCommand = apply {
-        payment.accountId = UUID.fromString(principal.name)
+    fun withAccountId(id: UUID): PaymentCommand = apply {
+        payment.accountId = id
     }
 }

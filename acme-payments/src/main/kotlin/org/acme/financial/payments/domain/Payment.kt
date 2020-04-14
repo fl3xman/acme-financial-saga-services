@@ -3,6 +3,7 @@ package org.acme.financial.payments.domain
 import org.acme.commons.domain.AggregateIdentity
 import org.hibernate.annotations.Columns
 import org.hibernate.annotations.Type
+import org.hibernate.annotations.Where
 import org.javamoney.moneta.Money
 import java.util.*
 import javax.persistence.*
@@ -15,6 +16,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "payment")
+@Where(clause = "account_id=?#{principal.accountId}")
 data class Payment(
     @Id
     @GeneratedValue(generator = "UUID")
@@ -33,10 +35,12 @@ data class Payment(
     val transaction: Money,
 
     @Embedded
-    @AttributeOverrides(value = [
-        AttributeOverride(name = "value", column = Column(name = "beneficiary_value")),
-        AttributeOverride(name = "type", column = Column(name = "beneficiary_type"))
-    ])
+    @AttributeOverrides(
+        value = [
+            AttributeOverride(name = "value", column = Column(name = "beneficiary_value")),
+            AttributeOverride(name = "type", column = Column(name = "beneficiary_type"))
+        ]
+    )
     val beneficiary: Beneficiary,
     val status: PaymentStatus = PaymentStatus.PENDING
 

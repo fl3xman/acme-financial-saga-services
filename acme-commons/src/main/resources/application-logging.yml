@@ -1,4 +1,4 @@
-logging:
-  exchange:
+acme:
+  logging:
     excludedPatterns: ${LOGGIN_EXCHANGE_EXCLUDEDPATTERNS:}
     allowHeaders: true
