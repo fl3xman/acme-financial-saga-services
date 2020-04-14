@@ -1,9 +1,9 @@
 package org.acme.financial.payments.domain
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.acme.commons.domain.AggregateIdentity
 import org.hibernate.annotations.Columns
 import org.hibernate.annotations.Type
-import org.hibernate.annotations.Where
 import org.javamoney.moneta.Money
 import java.util.*
 import javax.persistence.*
@@ -44,6 +44,7 @@ data class Payment(
     val status: PaymentStatus = PaymentStatus.PENDING
 
 ) : AggregateIdentity<UUID> {
+    @get:JsonIgnore
     override val aggregateId: UUID
         get() = accountId!!
 }

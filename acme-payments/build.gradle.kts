@@ -9,8 +9,8 @@ dependencies {
 
     implementation("org.jadira.usertype:usertype.core:7.0.0.CR1")
 
-    implementation("com.h2database:h2:1.4.200")
-    // runtimeOnly("com.h2database:h2:1.4.200")
+    runtimeOnly("com.h2database:h2:1.4.200")
+    runtimeOnly("org.postgresql:postgresql")
 
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {

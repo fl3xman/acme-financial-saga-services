@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    active: psql
+  datasource:
+    url: jdbc:postgresql://${PSQL_URL:localhost}:5432/paymentdb
+    username: payment
+    password: payment
+  jpa:
+    properties:
+      hibernate:
+        connection:
+          driver_class: org.postgresql.Driver
+        dialect: org.hibernate.dialect.PostgreSQL9Dialect

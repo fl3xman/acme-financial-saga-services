@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
  * @author fl3xman
  */
 
-@ResponseStatus(code = HttpStatus.NOT_FOUND)
-class PaymentNotFoundException(message: String) : RuntimeException(message) {
+@ResponseStatus(code = HttpStatus.UNPROCESSABLE_ENTITY)
+class PaymentProcessingException(message: String) : RuntimeException(message) {
     constructor() : this("")
 }
