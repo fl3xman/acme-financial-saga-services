@@ -14,7 +14,8 @@ import java.util.*
  * @author fl3xman
  */
 
-interface MessageService {
+interface MessageSenderService {
+
     fun <T> send(
         payload: T,
         complete: (Result<UUID>) -> Unit

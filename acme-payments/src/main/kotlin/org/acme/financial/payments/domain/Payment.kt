@@ -5,6 +5,7 @@ import org.acme.commons.domain.AggregateIdentity
 import org.hibernate.annotations.Columns
 import org.hibernate.annotations.Type
 import org.javamoney.moneta.Money
+import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
 
@@ -41,7 +42,13 @@ data class Payment(
         ]
     )
     val beneficiary: Beneficiary,
-    val status: PaymentStatus = PaymentStatus.PENDING
+    val status: PaymentStatus = PaymentStatus.PENDING,
+
+    @Column(name = "created_at")
+    val createdAt: LocalDateTime,
+
+    @Column(name = "modified_at")
+    val modifiedAt: LocalDateTime
 
 ) : AggregateIdentity<UUID> {
     @get:JsonIgnore

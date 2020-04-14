@@ -1,7 +1,10 @@
 package org.acme.financial.payments.configuration
 
-import org.acme.commons.kafka.service.KafkaMessageService
-import org.acme.commons.message.service.MessageService
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.acme.commons.kafka.service.KafkaMessageReceiverService
+import org.acme.commons.kafka.service.KafkaMessageSenderService
+import org.acme.commons.message.service.MessageReceiverService
+import org.acme.commons.message.service.MessageSenderService
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -38,8 +41,14 @@ class MessageConfiguration {
         )
 
     @Bean
-    fun messageService(
+    fun messageSenderService(
         kafkaTemplate: KafkaTemplate<String, String>,
         kafkaProducerTemplate: ReactiveKafkaProducerTemplate<String, String>
-    ): MessageService = KafkaMessageService(kafkaTemplate, kafkaProducerTemplate)
+    ): MessageSenderService = KafkaMessageSenderService(kafkaTemplate, kafkaProducerTemplate)
+
+    @Bean
+    fun messageReceiverService(
+        kafkaProperties: KafkaProperties,
+        objectMapper: ObjectMapper
+    ): MessageReceiverService = KafkaMessageReceiverService(kafkaProperties, objectMapper)
 }

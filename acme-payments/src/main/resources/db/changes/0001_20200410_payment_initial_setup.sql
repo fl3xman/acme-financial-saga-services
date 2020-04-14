@@ -8,7 +8,8 @@ CREATE TABLE payment(
     beneficiary_value       varchar(255) NOT NULL,
     beneficiary_type        varchar(60) NOT NULL,
     status                  varchar(60) NOT NULL DEFAULT 'pending',
-    created_at              timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at              timestamp NOT NULL DEFAULT NOW(),
+    modified_at             timestamp NOT NULL DEFAULT NOW() ON UPDATE NOW()
     );
 CREATE TABLE outbox(
     id              uuid PRIMARY KEY NOT NULL,

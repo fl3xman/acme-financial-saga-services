@@ -5,17 +5,13 @@ import org.acme.commons.domain.Identity
 import org.acme.commons.logging.provideLogger
 import org.acme.commons.message.MessagePayloadAware
 import org.acme.commons.message.MessageTopicAware
-import org.acme.commons.message.service.MessageService
+import org.acme.commons.message.service.MessageSenderService
 import org.apache.kafka.clients.producer.ProducerRecord
-import org.apache.kafka.common.errors.TimeoutException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.kafka.core.reactive.ReactiveKafkaProducerTemplate
 import reactor.core.publisher.Flux
-import reactor.core.scheduler.Scheduler
-import reactor.core.scheduler.Schedulers
 import reactor.kafka.sender.SenderRecord
-import reactor.kotlin.core.publisher.onErrorResume
 import java.util.*
 
 /**
@@ -24,10 +20,10 @@ import java.util.*
  * @author fl3xman
  */
 
-class KafkaMessageService(
+class KafkaMessageSenderService(
     @Autowired private val kafkaTemplate: KafkaTemplate<String, String>,
     @Autowired private val kafkaProducerTemplate: ReactiveKafkaProducerTemplate<String, String>
-) : MessageService {
+) : MessageSenderService {
 
     companion object {
         @JvmStatic

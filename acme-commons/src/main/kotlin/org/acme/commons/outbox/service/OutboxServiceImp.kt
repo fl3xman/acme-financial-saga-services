@@ -2,10 +2,11 @@ package org.acme.commons.outbox.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.acme.commons.domain.AggregateIdentity
-import org.acme.commons.message.service.MessageService
+import org.acme.commons.message.service.MessageSenderService
 import org.acme.commons.outbox.domain.Outbox
 import org.acme.commons.outbox.dto.OutboxDTO
 import org.acme.commons.outbox.repository.OutboxRepository
+import org.acme.commons.reactor.mapUnit
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -26,7 +27,7 @@ import javax.persistence.EntityNotFoundException
 class OutboxServiceImp(
     @Autowired private val outboxRepository: OutboxRepository,
     @Autowired private val objectMapper: ObjectMapper,
-    @Autowired private val messageService: MessageService
+    @Autowired private val messageSenderService: MessageSenderService
 ) : OutboxService {
 
     override fun <T : AggregateIdentity<UUID>> append(topic: String, payload: T) {
@@ -35,24 +36,24 @@ class OutboxServiceImp(
 
     override fun flushById(id: UUID): Mono<Unit> = Mono.defer {
         outboxRepository.findByIdOrNull(id)?.let {
-            messageService
+            messageSenderService
                 .send(OutboxDTO(it))
                 .doOnNext { result ->
                     result.getOrNull()?.let { id ->
                         outboxRepository.deleteById(id)
                     }
-                }.map { Unit }
+                }.mapUnit()
         } ?: Mono.error(EntityNotFoundException())
     }
 
     override fun flushAll(): Flux<Unit> = Flux.defer {
-        messageService
+        messageSenderService
             .bulkSend(outboxRepository.findAll().map { OutboxDTO(it) })
             .doOnNext { result ->
                 result.getOrNull()?.let { id ->
                     outboxRepository.deleteById(id)
                 }
-            }.map { Unit }
+            }.mapUnit()
     }
 
     override fun deleteAll(): Mono<Unit> = Mono.defer {

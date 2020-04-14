@@ -1,9 +1,12 @@
 package org.acme.financial.payments.service
 
+import org.acme.commons.message.service.MessageReceiverService
 import org.acme.commons.outbox.service.OutboxService
+import org.acme.commons.reactor.mapUnit
 import org.acme.financial.payments.command.PaymentCommand
 import org.acme.financial.payments.domain.Payment
 import org.acme.financial.payments.dto.PaymentDTO
+import org.acme.financial.payments.event.PaymentResultEvent
 import org.acme.financial.payments.exception.PaymentNotFoundException
 import org.acme.financial.payments.exception.PaymentProcessingException
 import org.acme.financial.payments.repository.PaymentRepository
@@ -27,8 +30,10 @@ import java.util.*
 class PaymentServiceImp(
     @Autowired private val paymentRepository: PaymentRepository,
     @Autowired private val outboxService: OutboxService,
+    @Autowired private val messageReceiverService: MessageReceiverService,
     @Autowired private val transactionTemplate: TransactionTemplate,
-    @Value("\${acme.payment.topics.payment-transaction-started}") private val topic: String
+    @Value("\${acme.payment.topics.payment-transaction-started}") private val startedTopic: String,
+    @Value("\${acme.payment.topics.payment-transaction-completed}") private val completedTopic: String
 ) : PaymentService {
 
     override fun create(input: PaymentCommand, accountId: UUID): Mono<PaymentDTO> = Mono.defer {
@@ -47,10 +52,16 @@ class PaymentServiceImp(
         paymentRepository.findAllByAccountId(accountId).map { PaymentDTO(it) }.toFlux()
     }
 
+    override fun onPaymentResult(): Flux<Unit> = Flux.defer {
+        messageReceiverService.on(completedTopic, PaymentResultEvent::class.java) {
+            paymentRepository.updateStatusById(it.id, it.status)?.let { true } ?: false
+        }.mapUnit()
+    }
+
     private fun createWithOutbox(input: PaymentCommand, accountId: UUID): Payment? {
         return transactionTemplate.execute {
             paymentRepository.save(input.withAccountId(accountId).payment).also { payment ->
-                outboxService.append(topic, payment)
+                outboxService.append(startedTopic, payment)
             }
         }
     }

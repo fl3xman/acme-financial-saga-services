@@ -16,4 +16,6 @@ interface PaymentService {
 
     fun getPayment(id: UUID, accountId: UUID): Mono<PaymentDTO>
     fun getPayments(accountId: UUID): Flux<PaymentDTO>
+
+    fun onPaymentResult(): Flux<Unit>
 }
