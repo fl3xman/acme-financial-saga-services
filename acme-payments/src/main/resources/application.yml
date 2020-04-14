@@ -26,8 +26,8 @@ spring:
 logging:
   level:
     org.acme.financial.payments: DEBUG
-    org.springframework.orm.jpa: DEBUG
-    org.springframework.transaction: DEBUG
+    #org.springframework.orm.jpa: DEBUG
+    #org.springframework.transaction: DEBUG
 
 acme:
   payment:
