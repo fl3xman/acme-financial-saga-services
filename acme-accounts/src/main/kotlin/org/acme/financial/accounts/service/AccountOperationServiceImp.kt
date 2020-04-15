@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.support.TransactionTemplate
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
 /**
  *
@@ -23,6 +24,7 @@ class AccountOperationServiceImp(
     @Autowired private val messageReceiverService: MessageReceiverService,
     @Autowired private val transactionTemplate: TransactionTemplate,
     @Value("\${acme.account.topics.payment-transaction-started}") private val startedTopic: String,
+    @Value("\${acme.account.topics.payment-transaction-started-dlq}") private val startedTopicDLQ: String,
     @Value("\${acme.account.topics.payment-transaction-completed}") private val completedTopic: String
 ): AccountOperationService {
 
@@ -32,9 +34,9 @@ class AccountOperationServiceImp(
     }
 
     override fun onAccountOperationStarted(): Flux<Unit> = Flux.defer {
-        messageReceiverService.on(startedTopic, AccountOperationEvent::class.java) {
+        messageReceiverService.on(Pair(startedTopic, startedTopicDLQ), AccountOperationEvent::class.java) {
             logger.debug("Received account operation starting event=$it")
-            true
-        }.mapUnit()
+            Mono.empty()
+        }
     }
 }

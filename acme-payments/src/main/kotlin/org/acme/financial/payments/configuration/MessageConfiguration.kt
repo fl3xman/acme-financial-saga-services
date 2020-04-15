@@ -49,6 +49,7 @@ class MessageConfiguration {
     @Bean
     fun messageReceiverService(
         kafkaProperties: KafkaProperties,
-        objectMapper: ObjectMapper
-    ): MessageReceiverService = KafkaMessageReceiverService(kafkaProperties, objectMapper)
+        objectMapper: ObjectMapper,
+        messageSenderService: MessageSenderService
+    ): MessageReceiverService = KafkaMessageReceiverService(kafkaProperties, objectMapper, messageSenderService)
 }

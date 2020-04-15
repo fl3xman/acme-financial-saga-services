@@ -5,7 +5,7 @@ springBoot {
 
 dependencies {
     implementation(project(":acme-commons"))
-    implementation("org.liquibase:liquibase-core")
+    implementation("org.liquibase:liquibase-core:3.8.9")
 
     implementation("org.jadira.usertype:usertype.core:7.0.0.CR1")
 

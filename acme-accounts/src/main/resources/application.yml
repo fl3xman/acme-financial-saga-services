@@ -46,4 +46,5 @@ acme:
           role: USER
     topics:
       payment-transaction-started: ${ACME_PAYMENT_TRX_STARTED_TOPIC:payment-transaction-started-topic}
+      payment-transaction-started-dlq: ${ACME_PAYMENT_TRX_STARTED_TOPIC_DLQ:payment-transaction-started-topic-dlq}
       payment-transaction-completed: ${ACME_PAYMENT_TRX_COMPLETED_TOPIC:payment-transaction-completed-topic}

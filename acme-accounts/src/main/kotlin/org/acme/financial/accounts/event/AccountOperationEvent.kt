@@ -11,10 +11,11 @@ import java.util.*
  * @project acme-payment-saga-services
  * @author fl3xman
  */
-class AccountOperationEvent(
+
+data class AccountOperationEvent(
     val id: UUID,
     val accountId: UUID,
-    val transaction: Money,
+    // val transaction: Money,
     val beneficiary: Beneficiary,
     val status: AccountOperationStatus,
     val createdAt: LocalDateTime

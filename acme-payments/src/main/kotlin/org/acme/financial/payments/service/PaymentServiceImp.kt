@@ -34,7 +34,8 @@ class PaymentServiceImp(
     @Autowired private val messageReceiverService: MessageReceiverService,
     @Autowired private val transactionTemplate: TransactionTemplate,
     @Value("\${acme.payment.topics.payment-transaction-started}") private val startedTopic: String,
-    @Value("\${acme.payment.topics.payment-transaction-completed}") private val completedTopic: String
+    @Value("\${acme.payment.topics.payment-transaction-completed}") private val completedTopic: String,
+    @Value("\${acme.payment.topics.payment-transaction-completed-dlq}") private val completedTopicDLQ: String
 ) : PaymentService {
 
     companion object {
@@ -59,10 +60,10 @@ class PaymentServiceImp(
     }
 
     override fun onPaymentResult(): Flux<Unit> = Flux.defer {
-        messageReceiverService.on(completedTopic, PaymentResultEvent::class.java) {
+        messageReceiverService.on(Pair(completedTopic, completedTopicDLQ), PaymentResultEvent::class.java) {
             logger.debug("Received payment result event=$it")
-            paymentRepository.modifyStatusById(it.id, it.status) > 0
-        }.mapUnit()
+            Mono.just(paymentRepository.modifyStatusById(it.id, it.status)).mapUnit()
+        }
     }
 
     private fun createWithOutbox(input: PaymentCommand, accountId: UUID): Payment? {

@@ -16,6 +16,8 @@ import java.util.*
 
 interface MessageSenderService {
 
+    // Send blocking
+
     fun <T> send(
         payload: T,
         complete: (Result<UUID>) -> Unit
@@ -32,6 +34,17 @@ interface MessageSenderService {
             T : MessageTopicAware,
             T : MessagePayloadAware
 
+    // Send blocking raw
+
+    fun send(
+        topic: String,
+        key: String,
+        payload: String,
+        complete: (Result<Unit>) -> Unit
+    )
+
+    // Send non-blocking
+
     fun <T> send(
         payload: T
     ): Mono<Result<UUID>> where T : Identity<UUID>,
@@ -45,4 +58,12 @@ interface MessageSenderService {
                                 T : AggregateIdentity<UUID>,
                                 T : MessageTopicAware,
                                 T : MessagePayloadAware
+
+    // Send non-blocking raw
+
+    fun send(
+        topic: String,
+        key: String,
+        payload: String
+    ): Mono<Unit>
 }
