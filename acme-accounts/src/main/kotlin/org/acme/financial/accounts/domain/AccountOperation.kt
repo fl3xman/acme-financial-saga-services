@@ -1,16 +1,10 @@
-package org.acme.financial.payments.domain
+package org.acme.financial.accounts.domain
 
-import com.fasterxml.jackson.annotation.JsonFormat
-import com.fasterxml.jackson.annotation.JsonIgnore
-import org.acme.commons.domain.AggregateIdentity
 import org.acme.commons.money.beneficiary.Beneficiary
-import org.acme.commons.time.DatetimeFormat
 import org.hibernate.annotations.Columns
 import org.hibernate.annotations.Type
 import org.javamoney.moneta.Money
 import org.springframework.data.annotation.CreatedDate
-import org.springframework.data.annotation.LastModifiedDate
-import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
@@ -22,14 +16,13 @@ import javax.persistence.*
  */
 
 @Entity
-@Table(name = "payment")
-@EntityListeners(AuditingEntityListener::class)
-data class Payment(
+@Table(name = "account_operation")
+data class AccountOperation(
     @Id
     @GeneratedValue(generator = "UUID")
     var id: UUID? = null,
 
-    @Column(name = "account_id")
+    @Column(name = "account_id", insertable = false, updatable = false)
     var accountId: UUID? = null,
 
     @Columns(
@@ -49,20 +42,12 @@ data class Payment(
         ]
     )
     val beneficiary: Beneficiary,
-    val status: PaymentStatus = PaymentStatus.PENDING,
 
-    @JsonFormat(pattern = DatetimeFormat.ZONED)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="account_id")
+    var account: Account? = null,
+
     @CreatedDate
     @Column(name = "created_at")
-    var createdAt: LocalDateTime? = null,
-
-    @JsonFormat(pattern = DatetimeFormat.ZONED)
-    @LastModifiedDate
-    @Column(name = "modified_at")
-    var modifiedAt: LocalDateTime? = null
-
-) : AggregateIdentity<UUID> {
-    @get:JsonIgnore
-    override val aggregateId: UUID
-        get() = accountId!!
-}
+    var createdAt: LocalDateTime? = null
+)

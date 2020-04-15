@@ -1,3 +1,5 @@
 databaseChangeLog:
   - include:
       file: classpath:db/changes/0001_20200410_account_initial_setup.sql
+  - include:
+      file: classpath:db/changes/0002_20200412_added_demo_account.sql

@@ -17,5 +17,5 @@ import reactor.core.publisher.Flux
 class AccountController {
 
     @GetMapping
-    fun getAccounts(): Flux<AccountDTO> = Flux.fromIterable(listOf(AccountDTO("John")))
+    fun getAccounts(): Flux<AccountDTO> = Flux.empty()
 }

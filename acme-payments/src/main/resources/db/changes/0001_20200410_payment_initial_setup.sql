@@ -9,12 +9,12 @@ CREATE TABLE payment(
     beneficiary_type        varchar(60) NOT NULL,
     status                  varchar(60) NOT NULL DEFAULT 'pending',
     created_at              timestamp NOT NULL DEFAULT NOW(),
-    modified_at             timestamp NOT NULL DEFAULT NOW() ON UPDATE NOW()
+    modified_at             timestamp
     );
 CREATE TABLE outbox(
     id              uuid PRIMARY KEY NOT NULL,
     aggregate_id    uuid NOT NULL,
     topic           varchar(255) NOT NULL,
     payload         text NOT NULL,
-    created_at      timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at      timestamp NOT NULL DEFAULT NOW()
     );

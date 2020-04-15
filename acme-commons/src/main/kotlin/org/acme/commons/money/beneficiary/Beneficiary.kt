@@ -1,4 +1,4 @@
-package org.acme.financial.payments.domain
+package org.acme.commons.money.beneficiary
 
 import javax.persistence.Embeddable
 

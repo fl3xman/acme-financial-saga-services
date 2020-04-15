@@ -22,6 +22,10 @@ interface PaymentRepository : JpaRepository<Payment, UUID> {
     fun findAllByAccountId(accountId: UUID): List<Payment>
 
     @Modifying
-    @Query("update Payment p set p.status = ?2 where p.id = ?1")
-    fun updateStatusById(id: UUID, status: PaymentStatus): Payment?
+    @Query("update Payment p set p.status = ?2 where p.id = ?1 AND p.status = ?3")
+    fun modifyStatusById(
+        id: UUID,
+        status: PaymentStatus,
+        modifiableStatus: PaymentStatus = PaymentStatus.PENDING
+    ): Int
 }

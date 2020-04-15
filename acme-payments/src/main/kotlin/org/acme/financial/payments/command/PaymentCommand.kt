@@ -2,7 +2,7 @@ package org.acme.financial.payments.command
 
 import org.acme.commons.money.validator.annotation.Currency
 import org.acme.commons.money.validator.annotation.IBAN
-import org.acme.financial.payments.domain.Beneficiary
+import org.acme.commons.money.beneficiary.Beneficiary
 import org.acme.financial.payments.domain.Payment
 import org.javamoney.moneta.Money
 import java.math.BigDecimal

@@ -1,8 +1,7 @@
-package org.acme.financial.payments.dto
+package org.acme.financial.accounts.dto
 
 import org.acme.commons.money.beneficiary.Beneficiary
-import org.acme.financial.payments.domain.Payment
-import org.acme.financial.payments.domain.PaymentStatus
+import org.acme.financial.accounts.domain.AccountOperation
 import java.math.BigDecimal
 import java.util.*
 
@@ -12,18 +11,16 @@ import java.util.*
  * @author fl3xman
  */
 
-data class PaymentDTO(
+data class AccountOperationDTO(
     val id: UUID,
     val amount: BigDecimal,
     val currency: String,
-    val status: PaymentStatus,
     val beneficiary: Beneficiary
 ) {
-    constructor(model: Payment) : this(
+    constructor(model: AccountOperation): this(
         model.id!!,
         model.transaction.numberStripped,
         model.transaction.currency.currencyCode,
-        model.status,
         model.beneficiary
     )
 }

@@ -25,6 +25,7 @@ spring:
 
 logging:
   level:
+    org.acme.commons: DEBUG
     org.acme.financial.payments: DEBUG
     #org.springframework.orm.jpa: DEBUG
     #org.springframework.transaction: DEBUG
@@ -32,11 +33,17 @@ logging:
 acme:
   payment:
     security:
-      user:
-        account-id: 123e4567-e89b-12d3-a456-426655440000
-        username: username
-        password: password
-        role: USER
+      users:
+        user-primary:
+          account-id: 123e4567-e89b-12d3-a456-426655440001
+          username: username1
+          password: password
+          role: USER
+        user-secondary:
+          account-id: 123e4567-e89b-12d3-a456-426655440002
+          username: username2
+          password: password
+          role: USER
     topics:
       payment-transaction-started: ${ACME_PAYMENT_TRX_STARTED_TOPIC:payment-transaction-started-topic}
       payment-transaction-completed: ${ACME_PAYMENT_TRX_COMPLETED_TOPIC:payment-transaction-completed-topic}

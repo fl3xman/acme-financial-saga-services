@@ -1,22 +1,20 @@
 server:
-  port: ${PORT:3000}
+  port: ${PORT:3002}
 
 spring:
   profiles:
     include: actuator,logging
-  datasource:
-    url: jdbc:h2:mem:accountdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    driver-class-name: org.h2.Driver
-    username: account
-    password: account
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      jadira:
+        usertype:
+          autoRegisterUserTypes: true
   liquibase:
     change-log: classpath:db/changelog.yml
   kafka:
     consumer:
       bootstrap-servers: ${KAFKA_SERVER:localhost:9092}
-      group-id: ${KAFKA_ACCOUNT_GROUP_ID:account_group_id}
+      group-id: ${KAFKA_PAYMENT_GROUP_ID:account_group_id}
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -24,7 +22,28 @@ spring:
       bootstrap-servers: ${KAFKA_SERVER:localhost:9092}
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
 logging:
   level:
+    org.acme.commons: DEBUG
     org.acme.financial.accounts: DEBUG
+    #org.springframework.orm.jpa: DEBUG
+    #org.springframework.transaction: DEBUG
 
+acme:
+  account:
+    security:
+      users:
+        user-primary:
+          account-id: 123e4567-e89b-12d3-a456-426655440001
+          username: username1
+          password: password
+          role: USER
+        user-secondary:
+          account-id: 123e4567-e89b-12d3-a456-426655440002
+          username: username2
+          password: password
+          role: USER
+    topics:
+      payment-transaction-started: ${ACME_PAYMENT_TRX_STARTED_TOPIC:payment-transaction-started-topic}
+      payment-transaction-completed: ${ACME_PAYMENT_TRX_COMPLETED_TOPIC:payment-transaction-completed-topic}

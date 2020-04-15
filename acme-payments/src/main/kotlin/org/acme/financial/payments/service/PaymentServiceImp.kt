@@ -1,5 +1,6 @@
 package org.acme.financial.payments.service
 
+import org.acme.commons.logging.provideLogger
 import org.acme.commons.message.service.MessageReceiverService
 import org.acme.commons.outbox.service.OutboxService
 import org.acme.commons.reactor.mapUnit
@@ -36,6 +37,11 @@ class PaymentServiceImp(
     @Value("\${acme.payment.topics.payment-transaction-completed}") private val completedTopic: String
 ) : PaymentService {
 
+    companion object {
+        @JvmStatic
+        private val logger = provideLogger()
+    }
+
     override fun create(input: PaymentCommand, accountId: UUID): Mono<PaymentDTO> = Mono.defer {
         createWithOutbox(input, accountId)?.let {
             PaymentDTO(it)
@@ -54,7 +60,8 @@ class PaymentServiceImp(
 
     override fun onPaymentResult(): Flux<Unit> = Flux.defer {
         messageReceiverService.on(completedTopic, PaymentResultEvent::class.java) {
-            paymentRepository.updateStatusById(it.id, it.status)?.let { true } ?: false
+            logger.debug("Received payment result event=$it")
+            paymentRepository.modifyStatusById(it.id, it.status) > 0
         }.mapUnit()
     }
 

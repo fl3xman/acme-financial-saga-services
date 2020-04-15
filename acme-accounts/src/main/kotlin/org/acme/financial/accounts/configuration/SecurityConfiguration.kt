@@ -1,4 +1,4 @@
-package org.acme.financial.payments.configuration
+package org.acme.financial.accounts.configuration
 
 import org.acme.commons.actuator.ActuatorRoute
 import org.acme.commons.security.AccountIdentityAwareUser
@@ -25,15 +25,15 @@ import java.util.*
 @EnableWebFluxSecurity
 class SecurityConfiguration(
     // Primary user
-    @Value("\${acme.payment.security.users.user-primary.account-id}") private val primaryAccountId: String,
-    @Value("\${acme.payment.security.users.user-primary.username}") private val primaryUsername: String,
-    @Value("\${acme.payment.security.users.user-primary.password}") private val primaryPassword: String,
-    @Value("\${acme.payment.security.users.user-primary.role}") private val primaryRole: String,
+    @Value("\${acme.account.security.users.user-primary.account-id}") private val primaryAccountId: String,
+    @Value("\${acme.account.security.users.user-primary.username}") private val primaryUsername: String,
+    @Value("\${acme.account.security.users.user-primary.password}") private val primaryPassword: String,
+    @Value("\${acme.account.security.users.user-primary.role}") private val primaryRole: String,
     // Secondary user
-    @Value("\${acme.payment.security.users.user-secondary.account-id}") private val secondaryAccountId: String,
-    @Value("\${acme.payment.security.users.user-secondary.username}") private val secondaryUsername: String,
-    @Value("\${acme.payment.security.users.user-secondary.password}") private val secondaryPassword: String,
-    @Value("\${acme.payment.security.users.user-secondary.role}") private val secondaryRole: String
+    @Value("\${acme.account.security.users.user-secondary.account-id}") private val secondaryAccountId: String,
+    @Value("\${acme.account.security.users.user-secondary.username}") private val secondaryUsername: String,
+    @Value("\${acme.account.security.users.user-secondary.password}") private val secondaryPassword: String,
+    @Value("\${acme.account.security.users.user-secondary.role}") private val secondaryRole: String
 
 ) {
     @Bean

@@ -1,4 +1,4 @@
-package org.acme.financial.payments.domain
+package org.acme.commons.money.beneficiary
 
 import com.fasterxml.jackson.annotation.JsonValue
 
@@ -8,5 +8,5 @@ import com.fasterxml.jackson.annotation.JsonValue
  * @author fl3xman
  */
 enum class BeneficiaryType(@JsonValue val value: String) {
-    IBAN("iban")
+    IBAN("IBAN")
 }
