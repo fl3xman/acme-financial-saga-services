@@ -56,7 +56,7 @@ class PaymentServiceImp(
     }
 
     override fun processPaymentResultEvent(data: PaymentResultDTO): Mono<Unit> = Mono.defer {
-        Mono.just(paymentRepository.modifyStatusById(data.id, data.status)).mapUnit()
+        Mono.just(paymentRepository.modifyStatusAndReasonById(data.id, data.status, data.reason)).mapUnit()
     }
 
     private fun createWithOutbox(input: PaymentCommand, accountId: UUID): Payment? {

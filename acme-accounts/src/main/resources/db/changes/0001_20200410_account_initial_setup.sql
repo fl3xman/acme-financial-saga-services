@@ -13,6 +13,7 @@ CREATE TABLE account_operation(
     transaction_amount      decimal(9,2) NOT NULL,
     beneficiary_value       varchar(255) NOT NULL,
     beneficiary_type        varchar(60) NOT NULL,
+    type                    varchar(60) NOT NULL,
     created_at              timestamp NOT NULL DEFAULT NOW()
     );
 CREATE TABLE outbox(

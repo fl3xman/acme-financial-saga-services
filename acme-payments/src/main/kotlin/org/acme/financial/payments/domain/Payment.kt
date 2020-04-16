@@ -51,6 +51,9 @@ data class Payment(
     val beneficiary: Beneficiary,
     val status: PaymentStatus = PaymentStatus.PENDING,
 
+    @JsonIgnore
+    val reason: String? = null,
+
     @JsonFormat(pattern = DatetimeFormat.ZONED)
     @CreatedDate
     @Column(name = "created_at")

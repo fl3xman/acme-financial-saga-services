@@ -8,6 +8,7 @@ CREATE TABLE payment(
     beneficiary_value       varchar(255) NOT NULL,
     beneficiary_type        varchar(60) NOT NULL,
     status                  varchar(60) NOT NULL DEFAULT 'pending',
+    reason                  varchar(255),
     created_at              timestamp NOT NULL DEFAULT NOW(),
     modified_at             timestamp
     );

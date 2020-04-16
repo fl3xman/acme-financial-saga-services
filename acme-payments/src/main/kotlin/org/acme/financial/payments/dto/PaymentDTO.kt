@@ -17,6 +17,7 @@ data class PaymentDTO(
     val amount: BigDecimal,
     val currency: String,
     val status: PaymentStatus,
+    val reason: String? = null,
     val beneficiary: Beneficiary
 ) {
     constructor(model: Payment) : this(
@@ -24,6 +25,7 @@ data class PaymentDTO(
         model.transaction.numberStripped,
         model.transaction.currency.currencyCode,
         model.status,
+        model.reason,
         model.beneficiary
     )
 }

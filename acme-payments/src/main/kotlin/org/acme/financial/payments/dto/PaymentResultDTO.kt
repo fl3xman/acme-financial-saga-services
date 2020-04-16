@@ -9,4 +9,8 @@ import java.util.*
  * @author fl3xman
  */
 
-data class PaymentResultDTO(val id: UUID, val status: PaymentStatus)
+data class PaymentResultDTO(
+    val id: UUID,
+    val status: PaymentStatus,
+    val reason: String? = null
+)
