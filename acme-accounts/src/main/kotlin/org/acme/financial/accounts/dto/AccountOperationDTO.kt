@@ -19,8 +19,8 @@ data class AccountOperationDTO(
 ) {
     constructor(model: AccountOperation): this(
         model.id!!,
-        model.transaction.numberStripped,
-        model.transaction.currency.currencyCode,
+        model.transaction.composite.numberStripped,
+        model.transaction.composite.currency.currencyCode,
         model.beneficiary
     )
 }

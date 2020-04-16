@@ -57,7 +57,9 @@ class AccountOperationServiceImp(
 
             val payee = accountRepository.findOneByBeneficiary(payment.beneficiary)
             val payer = accountRepository.findByIdOrNull(payment.accountId)
-            val payerBalance = Money.of(1000, "EUR")// accountOperationRepository.getBalanceByAccountIdAndCurrency(exchange.accountId, exchange.transaction.currency)
+            val payerBalance = accountOperationRepository.getBalanceByAccountIdAndCurrency(
+                payment.accountId, payment.transaction.currency.currencyCode
+            )?.let { balance -> Money.of(balance, payment.transaction.currency) }
 
             payment.process(topic, payee, payer, payerBalance).also {
                 if (it.payload.status == AccountOperationStatus.APPROVED) {
