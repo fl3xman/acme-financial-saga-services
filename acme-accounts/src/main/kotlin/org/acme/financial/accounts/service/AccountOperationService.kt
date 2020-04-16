@@ -1,6 +1,7 @@
 package org.acme.financial.accounts.service
 
-import reactor.core.publisher.Flux
+import org.acme.financial.accounts.event.AccountOperationEvent
+import reactor.core.publisher.Mono
 
 /**
  *
@@ -8,5 +9,5 @@ import reactor.core.publisher.Flux
  * @author fl3xman
  */
 interface AccountOperationService {
-    fun onAccountOperationStarted(): Flux<Unit>
+    fun processAccountOperationStartedEvent(event: AccountOperationEvent): Mono<Unit>
 }

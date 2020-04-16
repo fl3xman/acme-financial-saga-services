@@ -66,28 +66,29 @@ class KafkaMessageReceiverService(
                                 logger.error("Record processing failed with error=$exception")
                             }
                     }.retryWhen(
-                        Retry.backoff(maxRetry, duration).doAfterRetryAsync { retry ->
-                            if (retry.totalRetries() < (maxRetry - 1)) Mono.empty()
-                            else {
-                                logger.error("Record processing will redrive after retries=${retry.totalRetries()} with error=${retry.failure()}")
-                                redriveBy(topicWithDLQ.second, record, retry)
-                                    .then(record.receiverOffset().commit())
-                                    .then(Mono.error(retry.failure()))
+                        Retry.backoff(maxRetry, duration)
+                            .onRetryExhaustedThrow { _, retry ->
+                                logger.error("Record processing will acknowledge redrive offset=${record.receiverOffset().offset()}")
+
+                                record.receiverOffset().acknowledge()
+                                retry.failure()
                             }
-                        }
-                    )
+                    ).onErrorResume { exception ->
+                        logger.error("Record processing will redrive after retries=${maxRetry} with error=${exception}")
+                        redriveBy(topicWithDLQ.second, record, exception).then()
+                    }
                 }
-            }.retry().mapUnit()
+            }.mapUnit()
     }
 
     private fun redriveBy(
         topicDLQ: String?,
         record: ReceiverRecord<String, String>,
-        retry: Retry.RetrySignal
+        exception: Throwable
     ): Mono<Unit> {
         return topicDLQ?.let {
             messageSenderService.send(it, record.key(), objectMapper.writeValueAsString(
-                MessageDeadLetter(retry.failure(), record.value())
+                MessageDeadLetter(exception, record.value())
             ))
         } ?: Mono.empty()
     }
@@ -100,6 +101,5 @@ class KafkaMessageReceiverService(
                 }
             )
         }
-
     }
 }

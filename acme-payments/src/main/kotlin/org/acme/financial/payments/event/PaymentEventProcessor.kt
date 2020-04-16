@@ -1,8 +1,10 @@
 package org.acme.financial.payments.event
 
 import org.acme.commons.logging.provideLogger
+import org.acme.commons.message.service.MessageReceiverService
 import org.acme.financial.payments.service.PaymentService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
@@ -15,7 +17,10 @@ import org.springframework.stereotype.Component
 
 @Component
 class PaymentEventProcessor(
-    @Autowired private val paymentService: PaymentService
+    @Autowired private val paymentService: PaymentService,
+    @Autowired private val messageReceiverService: MessageReceiverService,
+    @Value("\${acme.payment.topics.payment-transaction-completed}") private val topic: String,
+    @Value("\${acme.payment.topics.payment-transaction-completed-dlq}") private val topicDLQ: String
 ) {
 
     companion object {
@@ -25,7 +30,10 @@ class PaymentEventProcessor(
 
     @EventListener(ApplicationReadyEvent::class)
     fun onReady() {
-        paymentService.onPaymentResult().subscribe()
+        messageReceiverService.on(Pair(topic, topicDLQ), PaymentResultEvent::class.java) {
+            logger.debug("Received payment result event=$it")
+            paymentService.processPaymentResultEvent(it)
+        }.subscribe()
     }
 }
 

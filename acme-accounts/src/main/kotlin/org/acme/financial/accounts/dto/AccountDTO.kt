@@ -15,7 +15,7 @@ data class AccountDTO(
     val beneficiary: Beneficiary
 ) {
     constructor(model: Account) : this(
-        model.id!!,
+        model.id,
         model.beneficiary
     )
 }

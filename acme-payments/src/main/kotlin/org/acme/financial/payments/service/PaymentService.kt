@@ -2,6 +2,7 @@ package org.acme.financial.payments.service
 
 import org.acme.financial.payments.command.PaymentCommand
 import org.acme.financial.payments.dto.PaymentDTO
+import org.acme.financial.payments.event.PaymentResultEvent
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.util.*
@@ -17,5 +18,5 @@ interface PaymentService {
     fun getPayment(id: UUID, accountId: UUID): Mono<PaymentDTO>
     fun getPayments(accountId: UUID): Flux<PaymentDTO>
 
-    fun onPaymentResult(): Flux<Unit>
+    fun processPaymentResultEvent(event: PaymentResultEvent): Mono<Unit>
 }

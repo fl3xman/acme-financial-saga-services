@@ -21,11 +21,8 @@ import reactor.core.publisher.Mono
 @Service
 class AccountOperationServiceImp(
     @Autowired private val outboxService: OutboxService,
-    @Autowired private val messageReceiverService: MessageReceiverService,
     @Autowired private val transactionTemplate: TransactionTemplate,
-    @Value("\${acme.account.topics.payment-transaction-started}") private val startedTopic: String,
-    @Value("\${acme.account.topics.payment-transaction-started-dlq}") private val startedTopicDLQ: String,
-    @Value("\${acme.account.topics.payment-transaction-completed}") private val completedTopic: String
+    @Value("\${acme.account.topics.payment-transaction-completed}") private val topic: String
 ): AccountOperationService {
 
     companion object {
@@ -33,10 +30,7 @@ class AccountOperationServiceImp(
         private val logger = provideLogger()
     }
 
-    override fun onAccountOperationStarted(): Flux<Unit> = Flux.defer {
-        messageReceiverService.on(Pair(startedTopic, startedTopicDLQ), AccountOperationEvent::class.java) {
-            logger.debug("Received account operation starting event=$it")
-            Mono.empty()
-        }
+    override fun processAccountOperationStartedEvent(event: AccountOperationEvent): Mono<Unit> = Mono.defer {
+        Mono.empty<Unit>()
     }
 }

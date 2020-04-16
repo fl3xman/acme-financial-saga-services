@@ -31,11 +31,8 @@ import java.util.*
 class PaymentServiceImp(
     @Autowired private val paymentRepository: PaymentRepository,
     @Autowired private val outboxService: OutboxService,
-    @Autowired private val messageReceiverService: MessageReceiverService,
     @Autowired private val transactionTemplate: TransactionTemplate,
-    @Value("\${acme.payment.topics.payment-transaction-started}") private val startedTopic: String,
-    @Value("\${acme.payment.topics.payment-transaction-completed}") private val completedTopic: String,
-    @Value("\${acme.payment.topics.payment-transaction-completed-dlq}") private val completedTopicDLQ: String
+    @Value("\${acme.payment.topics.payment-transaction-started}") private val topic: String
 ) : PaymentService {
 
     companion object {
@@ -59,17 +56,14 @@ class PaymentServiceImp(
         paymentRepository.findAllByAccountId(accountId).map { PaymentDTO(it) }.toFlux()
     }
 
-    override fun onPaymentResult(): Flux<Unit> = Flux.defer {
-        messageReceiverService.on(Pair(completedTopic, completedTopicDLQ), PaymentResultEvent::class.java) {
-            logger.debug("Received payment result event=$it")
-            Mono.just(paymentRepository.modifyStatusById(it.id, it.status)).mapUnit()
-        }
+    override fun processPaymentResultEvent(event: PaymentResultEvent): Mono<Unit> = Mono.defer {
+        Mono.just(paymentRepository.modifyStatusById(event.id, event.status)).mapUnit()
     }
 
     private fun createWithOutbox(input: PaymentCommand, accountId: UUID): Payment? {
         return transactionTemplate.execute {
             paymentRepository.save(input.withAccountId(accountId).payment).also { payment ->
-                outboxService.append(startedTopic, payment)
+                outboxService.append(topic, payment)
             }
         }
     }

@@ -11,12 +11,12 @@ import java.time.Duration
  */
 
 interface MessageReceiverService {
+
     fun <T> on(
         topic: String,
         mappingClass: Class<T>,
         process: (T) -> Mono<Unit>
-    ): Flux<Unit> =
-        on(Pair(topic, null), mappingClass, process)
+    ): Flux<Unit> = on(Pair(topic, null), mappingClass, process)
 
     fun <T> on(
         topicWithDLQ: Pair<String, String?>,
