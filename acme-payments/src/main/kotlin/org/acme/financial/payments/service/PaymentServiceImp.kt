@@ -1,13 +1,12 @@
 package org.acme.financial.payments.service
 
 import org.acme.commons.logging.provideLogger
-import org.acme.commons.message.service.MessageReceiverService
 import org.acme.commons.outbox.service.OutboxService
 import org.acme.commons.reactor.mapUnit
 import org.acme.financial.payments.command.PaymentCommand
 import org.acme.financial.payments.domain.Payment
 import org.acme.financial.payments.dto.PaymentDTO
-import org.acme.financial.payments.event.PaymentResultEvent
+import org.acme.financial.payments.dto.PaymentResultDTO
 import org.acme.financial.payments.exception.PaymentNotFoundException
 import org.acme.financial.payments.exception.PaymentProcessingException
 import org.acme.financial.payments.repository.PaymentRepository
@@ -56,8 +55,8 @@ class PaymentServiceImp(
         paymentRepository.findAllByAccountId(accountId).map { PaymentDTO(it) }.toFlux()
     }
 
-    override fun processPaymentResultEvent(event: PaymentResultEvent): Mono<Unit> = Mono.defer {
-        Mono.just(paymentRepository.modifyStatusById(event.id, event.status)).mapUnit()
+    override fun processPaymentResultEvent(data: PaymentResultDTO): Mono<Unit> = Mono.defer {
+        Mono.just(paymentRepository.modifyStatusById(data.id, data.status)).mapUnit()
     }
 
     private fun createWithOutbox(input: PaymentCommand, accountId: UUID): Payment? {

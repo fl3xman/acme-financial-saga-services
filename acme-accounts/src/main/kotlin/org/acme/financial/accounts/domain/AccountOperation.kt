@@ -1,5 +1,6 @@
 package org.acme.financial.accounts.domain
 
+import org.acme.commons.money.MonetaryOperationType
 import org.acme.commons.money.beneficiary.Beneficiary
 import org.hibernate.annotations.Columns
 import org.hibernate.annotations.Type
@@ -42,6 +43,8 @@ data class AccountOperation(
         ]
     )
     val beneficiary: Beneficiary,
+
+    val type: MonetaryOperationType,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="account_id")

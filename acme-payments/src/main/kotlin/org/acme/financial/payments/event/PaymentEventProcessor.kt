@@ -2,6 +2,7 @@ package org.acme.financial.payments.event
 
 import org.acme.commons.logging.provideLogger
 import org.acme.commons.message.service.MessageReceiverService
+import org.acme.financial.payments.dto.PaymentResultDTO
 import org.acme.financial.payments.service.PaymentService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -30,8 +31,8 @@ class PaymentEventProcessor(
 
     @EventListener(ApplicationReadyEvent::class)
     fun onReady() {
-        messageReceiverService.on(Pair(topic, topicDLQ), PaymentResultEvent::class.java) {
-            logger.debug("Received payment result event=$it")
+        messageReceiverService.on(Pair(topic, topicDLQ), PaymentResultDTO::class.java) {
+            logger.debug("Received payment result event with data=$it")
             paymentService.processPaymentResultEvent(it)
         }.subscribe()
     }

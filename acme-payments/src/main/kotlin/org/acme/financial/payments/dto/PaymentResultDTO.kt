@@ -1,4 +1,4 @@
-package org.acme.financial.payments.event
+package org.acme.financial.payments.dto
 
 import org.acme.financial.payments.domain.PaymentStatus
 import java.util.*
@@ -9,4 +9,4 @@ import java.util.*
  * @author fl3xman
  */
 
-data class PaymentResultEvent(val id: UUID, val status: PaymentStatus)
+data class PaymentResultDTO(val id: UUID, val status: PaymentStatus)

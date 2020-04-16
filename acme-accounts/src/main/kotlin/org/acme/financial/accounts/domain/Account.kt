@@ -27,5 +27,5 @@ data class Account(
     val beneficiary: Beneficiary,
 
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
-    var operations: List<AccountOperation> = emptyList()
+    var operations: MutableList<AccountOperation> = mutableListOf()
 )

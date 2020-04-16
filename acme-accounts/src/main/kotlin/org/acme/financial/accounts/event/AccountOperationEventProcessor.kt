@@ -2,6 +2,7 @@ package org.acme.financial.accounts.event
 
 import org.acme.commons.logging.provideLogger
 import org.acme.commons.message.service.MessageReceiverService
+import org.acme.financial.accounts.bo.AccountOperationExchangeBO
 import org.acme.financial.accounts.service.AccountOperationService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -30,8 +31,8 @@ class AccountOperationEventProcessor(
 
     @EventListener(ApplicationReadyEvent::class)
     fun onReady() {
-        messageReceiverService.on(Pair(topic, topicDLQ), AccountOperationEvent::class.java) {
-            logger.debug("Received account operation start event=$it")
+        messageReceiverService.on(Pair(topic, topicDLQ), AccountOperationExchangeBO::class.java) {
+            logger.debug("Received account operation start event with data=$it")
             accountOperationService.processAccountOperationStartedEvent(it)
         }.subscribe()
     }
