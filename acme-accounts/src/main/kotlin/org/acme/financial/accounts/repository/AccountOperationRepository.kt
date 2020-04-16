@@ -13,4 +13,7 @@ import java.util.*
 
 @Repository
 interface AccountOperationRepository: JpaRepository<AccountOperation, UUID> {
+
+    fun findOneByIdAndAccountId(id: UUID, accountId: UUID): AccountOperation?
+    fun findAllByAccountId(accountId: UUID): List<AccountOperation>
 }

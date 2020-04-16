@@ -1,5 +1,6 @@
 package org.acme.financial.accounts.repository
 
+import org.acme.commons.money.beneficiary.Beneficiary
 import org.acme.financial.accounts.domain.Account
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
@@ -13,4 +14,6 @@ import java.util.*
 
 @Repository
 interface AccountRepository: JpaRepository<Account, UUID> {
+
+    fun findOneByBeneficiary(beneficiary: Beneficiary): Account?
 }

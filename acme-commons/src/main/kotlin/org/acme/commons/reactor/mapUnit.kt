@@ -10,5 +10,4 @@ import reactor.core.publisher.Mono
  */
 
 fun Flux<*>.mapUnit(): Flux<Unit> = map { Unit }
-
 fun Mono<*>.mapUnit(): Mono<Unit> = map { Unit }
