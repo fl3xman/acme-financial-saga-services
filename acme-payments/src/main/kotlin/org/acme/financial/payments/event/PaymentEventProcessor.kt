@@ -20,8 +20,8 @@ import org.springframework.stereotype.Component
 class PaymentEventProcessor(
     @Autowired private val paymentService: PaymentService,
     @Autowired private val messageReceiverService: MessageReceiverService,
-    @Value("\${acme.payment.topics.payment-transaction-completed}") private val topic: String,
-    @Value("\${acme.payment.topics.payment-transaction-completed-dlq}") private val topicDLQ: String
+    @Value("\${acme.payment.topics.single-payment-completed}") private val topic: String,
+    @Value("\${acme.payment.topics.single-payment-completed-dlq}") private val topicDLQ: String
 ) {
 
     companion object {
@@ -33,7 +33,7 @@ class PaymentEventProcessor(
     fun onReady() {
         messageReceiverService.on(Pair(topic, topicDLQ), PaymentResultDTO::class.java) {
             logger.debug("Received payment result event with data=$it")
-            paymentService.processPaymentResultEvent(it)
+            paymentService.processPaymentResult(it)
         }.subscribe()
     }
 }

@@ -2,11 +2,10 @@ package org.acme.financial.accounts.bo
 
 import org.acme.commons.money.MonetaryOperationType
 import org.acme.commons.money.beneficiary.Beneficiary
-import org.acme.financial.accounts.command.AccountOperationOutboxCommand
+import org.acme.financial.accounts.command.AccountSinglePaymentOutboxCommand
 import org.acme.financial.accounts.domain.Account
 import org.acme.financial.accounts.domain.AccountOperation
 import org.acme.financial.accounts.domain.AccountOperationStatus
-import org.acme.financial.accounts.domain.AggregateMoney
 import org.javamoney.moneta.Money
 import java.time.LocalDateTime
 import java.util.*
@@ -17,7 +16,7 @@ import java.util.*
  * @author fl3xman
  */
 
-data class AccountOperationExchangeBO(
+data class AccountSinglePaymentBO(
     val id: UUID,
     val accountId: UUID,
     val transaction: Money,
@@ -25,23 +24,19 @@ data class AccountOperationExchangeBO(
     val status: AccountOperationStatus,
     val createdAt: LocalDateTime
 ) {
-    fun process(topic: String, payeeAccount: Account?, payerAccount: Account?, payerBalance: Money?): AccountOperationOutboxCommand {
-        return payerAccount?.let { payer ->
-            payeeAccount?.let { payee ->
-                if (payee.id == accountId) AccountOperationOutboxCommand.InvalidBeneficiary(topic, this)
-                else {
-                    payerBalance?.let { balance ->
-                        if (balance < transaction) AccountOperationOutboxCommand.InsufficientBalance(topic, this)
-                        else {
-                            deposit(payee, payer)
-                            withdraw(payer)
-
-                            AccountOperationOutboxCommand.Approved(topic, this)
-                        }
-                    } ?: AccountOperationOutboxCommand.InvalidBalance(topic, this)
-                }
-            } ?: AccountOperationOutboxCommand.InvalidBeneficiary(topic, this)
-        } ?: AccountOperationOutboxCommand.InvalidAccount(topic, this)
+    fun process(topic: String, payee: Account?, payer: Account?, payerBalance: Money?): AccountSinglePaymentOutboxCommand {
+        return when(true) {
+            payee == null ->                AccountSinglePaymentOutboxCommand.InvalidAccount(topic, this)
+            payer == null ->                AccountSinglePaymentOutboxCommand.InvalidAccount(topic, this)
+            payee?.id == accountId ->       AccountSinglePaymentOutboxCommand.InvalidBeneficiary(topic, this)
+            payerBalance == null ->         AccountSinglePaymentOutboxCommand.InvalidBalance(topic, this)
+            payerBalance < transaction ->   AccountSinglePaymentOutboxCommand.InsufficientBalance(topic, this)
+            else -> {
+                deposit(payee, payer)
+                withdraw(payer)
+                AccountSinglePaymentOutboxCommand.Approved(topic, this)
+            }
+        }
     }
 
     private fun deposit(payee: Account, payer: Account) {

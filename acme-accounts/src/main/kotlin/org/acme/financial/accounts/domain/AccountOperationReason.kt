@@ -1,9 +1,6 @@
 package org.acme.financial.accounts.domain
 
 import com.fasterxml.jackson.annotation.JsonValue
-import org.acme.financial.accounts.bo.AccountOperationExchangeBO
-import org.acme.financial.accounts.command.AccountOperationOutboxCommand
-import org.acme.financial.accounts.dto.AccountOperationExchangeDTO
 
 /**
  *

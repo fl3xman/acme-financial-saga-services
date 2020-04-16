@@ -2,7 +2,7 @@ package org.acme.financial.accounts.event
 
 import org.acme.commons.logging.provideLogger
 import org.acme.commons.message.service.MessageReceiverService
-import org.acme.financial.accounts.bo.AccountOperationExchangeBO
+import org.acme.financial.accounts.bo.AccountSinglePaymentBO
 import org.acme.financial.accounts.service.AccountOperationService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -20,8 +20,8 @@ import org.springframework.stereotype.Component
 class AccountOperationEventProcessor(
     @Autowired private val accountOperationService: AccountOperationService,
     @Autowired private val messageReceiverService: MessageReceiverService,
-    @Value("\${acme.account.topics.payment-transaction-started}") private val topic: String,
-    @Value("\${acme.account.topics.payment-transaction-started-dlq}") private val topicDLQ: String
+    @Value("\${acme.account.topics.single-payment-started}") private val topic: String,
+    @Value("\${acme.account.topics.single-payment-started-dlq}") private val topicDLQ: String
 ) {
 
     companion object {
@@ -31,9 +31,9 @@ class AccountOperationEventProcessor(
 
     @EventListener(ApplicationReadyEvent::class)
     fun onReady() {
-        messageReceiverService.on(Pair(topic, topicDLQ), AccountOperationExchangeBO::class.java) {
-            logger.debug("Received account operation start event with data=$it")
-            accountOperationService.processAccountOperationStartedEvent(it)
+        messageReceiverService.on(Pair(topic, topicDLQ), AccountSinglePaymentBO::class.java) {
+            logger.debug("Received single payment event with data=$it")
+            accountOperationService.processAccountSinglePayment(it)
         }.subscribe()
     }
 }

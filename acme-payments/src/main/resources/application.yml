@@ -45,6 +45,6 @@ acme:
           password: password
           role: USER
     topics:
-      payment-transaction-started: ${ACME_PAYMENT_TRX_STARTED_TOPIC:payment-transaction-started-topic}
-      payment-transaction-completed: ${ACME_PAYMENT_TRX_COMPLETED_TOPIC:payment-transaction-completed-topic}
-      payment-transaction-completed-dlq: ${ACME_PAYMENT_TRX_COMPLETED_TOPIC_DLQ:payment-transaction-completed-topic-dlq}
+      single-payment-started: ${ACME_SINGLE_PAYMENT_STARTED_TOPIC:single-payment-started-topic}
+      single-payment-completed: ${ACME_SINGLE_PAYMENT_COMPLETED_TOPIC:single-payment-completed-topic}
+      single-payment-completed-dlq: ${ACME_SINGLE_PAYMENT_COMPLETED_TOPIC_DLQ:single-payment-completed-topic-dlq}

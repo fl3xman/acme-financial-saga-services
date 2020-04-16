@@ -4,7 +4,8 @@ import org.acme.commons.logging.provideLogger
 import org.acme.commons.outbox.service.OutboxService
 import org.acme.commons.reactor.mapUnit
 import org.acme.financial.accounts.dto.AccountOperationDTO
-import org.acme.financial.accounts.bo.AccountOperationExchangeBO
+import org.acme.financial.accounts.bo.AccountSinglePaymentBO
+import org.acme.financial.accounts.domain.AccountOperationStatus
 import org.acme.financial.accounts.exception.AccountOperationNotFoundException
 import org.acme.financial.accounts.exception.AccountOperationProcessingException
 import org.acme.financial.accounts.repository.AccountOperationRepository
@@ -33,7 +34,7 @@ class AccountOperationServiceImp(
     @Autowired private val accountOperationRepository: AccountOperationRepository,
     @Autowired private val outboxService: OutboxService,
     @Autowired private val transactionTemplate: TransactionTemplate,
-    @Value("\${acme.account.topics.payment-transaction-completed}") private val topic: String
+    @Value("\${acme.account.topics.single-payment-completed}") private val topic: String
 ): AccountOperationService {
 
     companion object {
@@ -46,21 +47,25 @@ class AccountOperationServiceImp(
             AccountOperationDTO(it)
         }?.toMono() ?: Mono.error(AccountOperationNotFoundException("Account operation for id=$id does not exist!"))
     }
+
     override fun getAccountOperations(accountId: UUID): Flux<AccountOperationDTO> = Flux.defer {
         accountOperationRepository.findAllByAccountId(accountId).map { AccountOperationDTO(it) }.toFlux()
     }
 
-    override fun processAccountOperationStartedEvent(exchange: AccountOperationExchangeBO): Mono<Unit> = Mono.defer {
-        Mono.just(transactionTemplate.execute {
+    override fun processAccountSinglePayment(payment: AccountSinglePaymentBO): Mono<Unit> = Mono.defer {
+        transactionTemplate.execute {
 
-            val payee = accountRepository.findOneByBeneficiary(exchange.beneficiary)
-            val payer = accountRepository.findByIdOrNull(exchange.accountId)
+            val payee = accountRepository.findOneByBeneficiary(payment.beneficiary)
+            val payer = accountRepository.findByIdOrNull(payment.accountId)
             val payerBalance = Money.of(1000, "EUR")// accountOperationRepository.getBalanceByAccountIdAndCurrency(exchange.accountId, exchange.transaction.currency)
 
-            exchange.process(topic, payee, payer, payerBalance).also {
-                accountRepository.saveAll(listOf(payee, payer))
+            payment.process(topic, payee, payer, payerBalance).also {
+                if (it.payload.status == AccountOperationStatus.APPROVED) {
+                    accountRepository.saveAll(listOf(payee, payer))
+                }
                 outboxService.append(it)
             }
-        }?.toMono() ?: Mono.error(AccountOperationProcessingException("Account operation failed for exchange=$exchange"))).mapUnit()
-    }
+
+        }?.toMono() ?: Mono.error(AccountOperationProcessingException("Account operation failed for payment=$payment"))
+    }.mapUnit()
 }

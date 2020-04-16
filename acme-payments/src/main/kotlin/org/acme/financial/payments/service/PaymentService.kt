@@ -18,5 +18,5 @@ interface PaymentService {
     fun getPayment(id: UUID, accountId: UUID): Mono<PaymentDTO>
     fun getPayments(accountId: UUID): Flux<PaymentDTO>
 
-    fun processPaymentResultEvent(data: PaymentResultDTO): Mono<Unit>
+    fun processPaymentResult(result: PaymentResultDTO): Mono<Unit>
 }

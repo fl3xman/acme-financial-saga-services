@@ -31,7 +31,7 @@ class PaymentServiceImp(
     @Autowired private val paymentRepository: PaymentRepository,
     @Autowired private val outboxService: OutboxService,
     @Autowired private val transactionTemplate: TransactionTemplate,
-    @Value("\${acme.payment.topics.payment-transaction-started}") private val topic: String
+    @Value("\${acme.payment.topics.single-payment-started}") private val topic: String
 ) : PaymentService {
 
     companion object {
@@ -55,8 +55,8 @@ class PaymentServiceImp(
         paymentRepository.findAllByAccountId(accountId).map { PaymentDTO(it) }.toFlux()
     }
 
-    override fun processPaymentResultEvent(data: PaymentResultDTO): Mono<Unit> = Mono.defer {
-        Mono.just(paymentRepository.modifyStatusAndReasonById(data.id, data.status, data.reason)).mapUnit()
+    override fun processPaymentResult(result: PaymentResultDTO): Mono<Unit> = Mono.defer {
+        Mono.just(paymentRepository.modifyStatusAndReasonById(result.id, result.status, result.reason)).mapUnit()
     }
 
     private fun createWithOutbox(input: PaymentCommand, accountId: UUID): Payment? {
