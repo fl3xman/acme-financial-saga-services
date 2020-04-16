@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 
@@ -23,6 +24,7 @@ interface PaymentRepository : JpaRepository<Payment, UUID> {
 
     @Modifying
     @Query("update Payment p set p.status = ?2, p.reason = ?3 where p.id = ?1 AND p.status = ?4")
+    @Transactional
     fun modifyStatusAndReasonById(
         id: UUID,
         status: PaymentStatus,

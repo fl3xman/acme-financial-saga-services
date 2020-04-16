@@ -6,6 +6,7 @@ import org.hibernate.annotations.Columns
 import org.hibernate.annotations.Type
 import org.javamoney.moneta.Money
 import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
@@ -18,6 +19,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "account_operation")
+@EntityListeners(AuditingEntityListener::class)
 data class AccountOperation(
     @Id
     @GeneratedValue(generator = "UUID")
@@ -26,6 +28,10 @@ data class AccountOperation(
     @Column(name = "account_id", insertable = false, updatable = false)
     var accountId: UUID? = null,
 
+    /*
+    @Embedded
+    val transaction: AggregateMoney,
+    */
     @Columns(
         columns = [
             Column(name = "transaction_currency"),
@@ -44,9 +50,10 @@ data class AccountOperation(
     )
     val beneficiary: Beneficiary,
 
+    @Enumerated(EnumType.STRING)
     val type: MonetaryOperationType,
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH])
     @JoinColumn(name="account_id")
     var account: Account? = null,
 

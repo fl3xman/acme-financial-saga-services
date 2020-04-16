@@ -18,8 +18,8 @@ import javax.money.MonetaryAmount
 @Repository
 interface AccountOperationRepository: JpaRepository<AccountOperation, UUID> {
 
-    @Query("select sum(o.transaction) from AccountOperation o where o.accountId = ?1 and o.transaction.currency = ?2")
-    fun getBalanceByAccountIdAndCurrency(accountId: UUID, currency: CurrencyUnit): Money?
+    // @Query("select sum(o.transaction) from AccountOperation o where o.accountId = ?1 and o.transaction = ?2")
+    // fun getBalanceByAccountIdAndCurrency(accountId: UUID, currency: CurrencyUnit): Money?
 
     fun findOneByIdAndAccountId(id: UUID, accountId: UUID): AccountOperation?
     fun findAllByAccountId(accountId: UUID): List<AccountOperation>

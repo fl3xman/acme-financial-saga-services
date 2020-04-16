@@ -6,8 +6,8 @@ import org.acme.financial.accounts.command.AccountOperationOutboxCommand
 import org.acme.financial.accounts.domain.Account
 import org.acme.financial.accounts.domain.AccountOperation
 import org.acme.financial.accounts.domain.AccountOperationStatus
+import org.acme.financial.accounts.domain.AggregateMoney
 import org.javamoney.moneta.Money
-import org.springframework.data.repository.findByIdOrNull
 import java.time.LocalDateTime
 import java.util.*
 

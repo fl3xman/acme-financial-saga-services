@@ -9,6 +9,7 @@ import org.acme.financial.accounts.exception.AccountOperationNotFoundException
 import org.acme.financial.accounts.exception.AccountOperationProcessingException
 import org.acme.financial.accounts.repository.AccountOperationRepository
 import org.acme.financial.accounts.repository.AccountRepository
+import org.javamoney.moneta.Money
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.repository.findByIdOrNull
@@ -54,9 +55,10 @@ class AccountOperationServiceImp(
 
             val payee = accountRepository.findOneByBeneficiary(exchange.beneficiary)
             val payer = accountRepository.findByIdOrNull(exchange.accountId)
-            val payerBalance = accountOperationRepository.getBalanceByAccountIdAndCurrency(exchange.accountId, exchange.transaction.currency)
+            val payerBalance = Money.of(1000, "EUR")// accountOperationRepository.getBalanceByAccountIdAndCurrency(exchange.accountId, exchange.transaction.currency)
 
             exchange.process(topic, payee, payer, payerBalance).also {
+                accountRepository.saveAll(listOf(payee, payer))
                 outboxService.append(it)
             }
         }?.toMono() ?: Mono.error(AccountOperationProcessingException("Account operation failed for exchange=$exchange"))).mapUnit()

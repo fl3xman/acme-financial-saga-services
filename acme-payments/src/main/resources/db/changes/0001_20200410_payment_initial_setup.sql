@@ -7,7 +7,7 @@ CREATE TABLE payment(
     transaction_amount      decimal(9,2) NOT NULL,
     beneficiary_value       varchar(255) NOT NULL,
     beneficiary_type        varchar(60) NOT NULL,
-    status                  varchar(60) NOT NULL DEFAULT 'pending',
+    status                  varchar(60) NOT NULL DEFAULT 'PENDING',
     reason                  varchar(255),
     created_at              timestamp NOT NULL DEFAULT NOW(),
     modified_at             timestamp

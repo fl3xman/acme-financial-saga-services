@@ -49,6 +49,8 @@ data class Payment(
         ]
     )
     val beneficiary: Beneficiary,
+
+    @Enumerated(EnumType.STRING)
     val status: PaymentStatus = PaymentStatus.PENDING,
 
     @JsonIgnore
