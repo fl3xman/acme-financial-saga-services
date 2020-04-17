@@ -30,6 +30,10 @@ logging:
     #org.springframework.orm.jpa: DEBUG
     #org.springframework.transaction: DEBUG
 
+springdoc:
+  swagger-ui:
+    path: /docs
+
 acme:
   account:
     security:

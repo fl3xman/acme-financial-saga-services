@@ -23,4 +23,8 @@ spring:
 logging:
   level:
     org.acme.financial.api: DEBUG
+    org.springframework.cloud.gateway: DEBUG
 
+springdoc:
+  swagger-ui:
+    path: /docs

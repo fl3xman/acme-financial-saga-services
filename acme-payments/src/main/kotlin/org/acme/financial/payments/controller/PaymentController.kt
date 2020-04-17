@@ -1,5 +1,6 @@
 package org.acme.financial.payments.controller
 
+import io.swagger.v3.oas.annotations.Hidden
 import org.acme.commons.security.provideAccountIdentity
 import org.acme.financial.payments.command.PaymentCommand
 import org.acme.financial.payments.dto.PaymentDTO
@@ -23,6 +24,7 @@ import java.util.*
 class PaymentController(
     @Autowired private val paymentService: PaymentService
 ) {
+    @Hidden
     @PostMapping(path = [PaymentRoute.TRANSFER_IBAN])
     fun transferUsingIBAN(
         @Validated @RequestBody input: PaymentCommand.TransferUsingIBAN, auth: Authentication

@@ -1,6 +1,7 @@
 package org.acme.financial.payments.configuration
 
 import org.acme.commons.actuator.ActuatorRoute
+import org.acme.commons.openapi.OpenapiRoute
 import org.acme.commons.security.AccountIdentityAwareUser
 import org.acme.commons.security.InMemoryAccountIdentityAwareUserDetailService
 import org.springframework.beans.factory.annotation.Value
@@ -44,7 +45,7 @@ class SecurityConfiguration(
             .httpBasic()
             .and()
             .authorizeExchange()
-            .pathMatchers(ActuatorRoute.ANY).permitAll()
+            .pathMatchers(ActuatorRoute.ANY, *OpenapiRoute.ANY).permitAll()
             .anyExchange().authenticated()
             .and()
             .build()
