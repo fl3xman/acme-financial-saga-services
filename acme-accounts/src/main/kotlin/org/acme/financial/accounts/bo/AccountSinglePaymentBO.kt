@@ -6,7 +6,7 @@ import org.acme.financial.accounts.command.AccountSinglePaymentOutboxCommand
 import org.acme.financial.accounts.domain.Account
 import org.acme.financial.accounts.domain.AccountOperation
 import org.acme.financial.accounts.domain.AccountOperationStatus
-import org.acme.financial.accounts.domain.AggregateMoney
+import org.acme.financial.accounts.domain.AccountMoney
 import org.javamoney.moneta.Money
 import java.time.LocalDateTime
 import java.util.*
@@ -43,7 +43,7 @@ data class AccountSinglePaymentBO(
     private fun deposit(payee: Account, payer: Account) {
         payee.operations.add(
             AccountOperation(
-                transaction = AggregateMoney(transaction),
+                transaction = AccountMoney(transaction),
                 beneficiary = payer.beneficiary,
                 type = MonetaryOperationType.DEPOSIT
             ).also {
@@ -55,7 +55,7 @@ data class AccountSinglePaymentBO(
     private fun withdraw(payer: Account) {
         payer.operations.add(
             AccountOperation(
-                transaction = AggregateMoney(transaction.negate()),
+                transaction = AccountMoney(transaction.negate()),
                 beneficiary = beneficiary,
                 type = MonetaryOperationType.WITHDRAW
             ).also {

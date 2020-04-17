@@ -26,7 +26,7 @@ data class AccountOperation(
     var accountId: UUID? = null,
 
     @Embedded
-    val transaction: AggregateMoney,
+    val transaction: AccountMoney,
 
     @Embedded
     @AttributeOverrides(

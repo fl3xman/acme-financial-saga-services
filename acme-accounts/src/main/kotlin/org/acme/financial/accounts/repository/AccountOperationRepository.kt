@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 import java.math.BigDecimal
 import java.util.*
+import javax.persistence.Tuple
 
 /**
  *
@@ -19,6 +20,8 @@ interface AccountOperationRepository: JpaRepository<AccountOperation, UUID> {
     @Query("select sum(o.transaction.amount) from AccountOperation o where o.accountId = ?1 and o.transaction.currency = ?2")
     fun getBalanceByAccountIdAndCurrency(accountId: UUID, currency: String): BigDecimal?
 
-    fun findOneByIdAndAccountId(id: UUID, accountId: UUID): AccountOperation?
+    @Query("select sum(o.transaction.amount), o.transaction.currency from AccountOperation o where o.accountId = ?1 group by o.transaction.currency")
+    fun getAllBalancesByAccountId(accountId: UUID): List<Tuple>
+
     fun findAllByAccountId(accountId: UUID): List<AccountOperation>
 }

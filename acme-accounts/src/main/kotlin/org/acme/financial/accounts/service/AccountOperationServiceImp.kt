@@ -6,7 +6,7 @@ import org.acme.commons.reactor.mapUnit
 import org.acme.financial.accounts.dto.AccountOperationDTO
 import org.acme.financial.accounts.bo.AccountSinglePaymentBO
 import org.acme.financial.accounts.domain.AccountOperationStatus
-import org.acme.financial.accounts.exception.AccountOperationNotFoundException
+import org.acme.financial.accounts.dto.AccountBalanceDTO
 import org.acme.financial.accounts.exception.AccountOperationProcessingException
 import org.acme.financial.accounts.repository.AccountOperationRepository
 import org.acme.financial.accounts.repository.AccountRepository
@@ -42,13 +42,11 @@ class AccountOperationServiceImp(
         private val logger = provideLogger()
     }
 
-    override fun getAccountOperation(id: UUID, accountId: UUID): Mono<AccountOperationDTO> = Mono.defer {
-        accountOperationRepository.findOneByIdAndAccountId(id, accountId)?.let {
-            AccountOperationDTO(it)
-        }?.toMono() ?: Mono.error(AccountOperationNotFoundException("Account operation for id=$id does not exist!"))
+    override fun getAccountBalances(accountId: UUID): Flux<AccountBalanceDTO> = Flux.defer {
+        accountOperationRepository.getAllBalancesByAccountId(accountId).map { AccountBalanceDTO(it) }.toFlux()
     }
 
-    override fun getAccountOperations(accountId: UUID): Flux<AccountOperationDTO> = Flux.defer {
+    override fun getAccountHistory(accountId: UUID): Flux<AccountOperationDTO> = Flux.defer {
         accountOperationRepository.findAllByAccountId(accountId).map { AccountOperationDTO(it) }.toFlux()
     }
 

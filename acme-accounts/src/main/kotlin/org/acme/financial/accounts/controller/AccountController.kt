@@ -1,6 +1,7 @@
 package org.acme.financial.accounts.controller
 
 import org.acme.commons.security.provideAccountIdentity
+import org.acme.financial.accounts.dto.AccountBalanceDTO
 import org.acme.financial.accounts.dto.AccountOperationDTO
 import org.acme.financial.accounts.service.AccountOperationService
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,13 +25,13 @@ import java.util.*
 class AccountController(
     @Autowired private val accountOperationService: AccountOperationService
 ) {
-    @GetMapping(path = [AccountRoute.ME + AccountRoute.OPERATIONS + AccountRoute.IDENTITY])
-    fun getAccountOperation(@PathVariable id: UUID, auth: Authentication): Mono<AccountOperationDTO> {
-        return accountOperationService.getAccountOperation(id, provideAccountIdentity(auth))
+    @GetMapping(path = [AccountRoute.ME + AccountRoute.BALANCES])
+    fun getAccountBalances(auth: Authentication): Flux<AccountBalanceDTO> {
+        return accountOperationService.getAccountBalances(provideAccountIdentity(auth))
     }
 
-    @GetMapping(path = [AccountRoute.ME + AccountRoute.OPERATIONS])
-    fun getAccountOperations(auth: Authentication): Flux<AccountOperationDTO> {
-        return accountOperationService.getAccountOperations(provideAccountIdentity(auth))
+    @GetMapping(path = [AccountRoute.ME + AccountRoute.HISTORY])
+    fun getAccountHistory(auth: Authentication): Flux<AccountOperationDTO> {
+        return accountOperationService.getAccountHistory(provideAccountIdentity(auth))
     }
 }

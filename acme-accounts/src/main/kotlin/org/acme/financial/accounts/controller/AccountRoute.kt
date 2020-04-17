@@ -9,6 +9,6 @@ package org.acme.financial.accounts.controller
 object AccountRoute {
     const val ROOT = "/accounts"
     const val ME = "/me"
-    const val OPERATIONS = "/operations"
-    const val IDENTITY = "/{id}"
+    const val BALANCES = "/balances"
+    const val HISTORY = "/history"
 }

@@ -14,7 +14,7 @@ import javax.persistence.Embeddable
  */
 
 @Embeddable
-data class AggregateMoney(
+data class AccountMoney(
 
     @Columns(
         columns = [
@@ -30,5 +30,4 @@ data class AggregateMoney(
 
     @Column(name = "transaction_currency", insertable = false, updatable = false)
     val currency: String? = null
-
 )

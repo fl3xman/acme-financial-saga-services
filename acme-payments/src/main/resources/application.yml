@@ -36,12 +36,12 @@ acme:
       users:
         user-primary:
           account-id: 123e4567-e89b-12d3-a456-426655440001
-          username: username1
+          username: AT483200000000000001
           password: password
           role: USER
         user-secondary:
           account-id: 123e4567-e89b-12d3-a456-426655440002
-          username: username2
+          username: AT483200000000000002
           password: password
           role: USER
     topics:
