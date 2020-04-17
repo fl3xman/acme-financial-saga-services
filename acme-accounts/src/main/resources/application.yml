@@ -31,8 +31,8 @@ logging:
     #org.springframework.transaction: DEBUG
 
 springdoc:
-  swagger-ui:
-    path: /docs
+  api-docs:
+    path: /docs/accounts
 
 acme:
   account:

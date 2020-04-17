@@ -32,5 +32,6 @@ dependencies {
     api("org.springframework.boot:spring-boot-starter-security")
     api("org.springframework.boot:spring-boot-starter-actuator")
 
-    api("org.springdoc:springdoc-openapi-webflux-ui:1.3.2")
+    api("org.springdoc:springdoc-openapi-webflux-core:1.3.2")
+    api("org.springdoc:springdoc-openapi-kotlin:1.3.2")
 }
