@@ -1,6 +1,7 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 springBoot {
     mainClassName = "org.acme.financial.payments.FinancialPaymentApplication"
-    version = "1.0.0"
 }
 
 dependencies {
@@ -15,5 +16,12 @@ dependencies {
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+    }
+}
+
+tasks {
+    getByName<BootJar>("bootJar") {
+        archiveBaseName.set("acme-payments")
+        archiveVersion.set("1.0.0")
     }
 }

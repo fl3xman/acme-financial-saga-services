@@ -14,8 +14,12 @@ import org.springframework.boot.runApplication
         "org.acme.financial.api"
     ]
 )
-class FinancialApiGatewayApplication
-
-fun main(args: Array<String>) {
-    runApplication<FinancialApiGatewayApplication>(*args)
+class FinancialApiGatewayApplication {
+    companion object {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            runApplication<FinancialApiGatewayApplication>(*args)
+        }
+    }
 }
+

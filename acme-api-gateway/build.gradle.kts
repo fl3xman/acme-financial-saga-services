@@ -1,6 +1,7 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 springBoot {
     mainClassName = "org.acme.financial.api.FinancialApiGatewayApplication"
-    version = "1.0.0"
 }
 
 dependencies {
@@ -16,5 +17,12 @@ dependencies {
 dependencyManagement {
     imports {
         mavenBom("org.springframework.cloud:spring-cloud-dependencies:Hoxton.SR3")
+    }
+}
+
+tasks {
+    getByName<BootJar>("bootJar") {
+        archiveBaseName.set("acme-api-gateway")
+        archiveVersion.set("1.0.0")
     }
 }

@@ -15,8 +15,12 @@ import org.springframework.boot.runApplication
         "org.acme.financial.accounts"
     ]
 )
-class FinancialAccountApplication
-
-fun main(args: Array<String>) {
-    runApplication<FinancialAccountApplication>(*args)
+class FinancialAccountApplication {
+    companion object {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            runApplication<FinancialAccountApplication>(*args)
+        }
+    }
 }
+

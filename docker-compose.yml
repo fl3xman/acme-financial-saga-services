@@ -1,5 +1,64 @@
 version: '3'
 services:
+  api:
+    build:
+      context: ./
+      dockerfile: ./acme-api-gateway/Dockerfile
+    image: acme-services/acme-api-gateway
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - ROOT_PAYMENT=http://payment:3001
+      - ROOT_ACCOUNT=http://account:3002
+  payment:
+    build:
+      context: ./
+      dockerfile: ./acme-payments/Dockerfile
+    image: acme-services/acme-payments
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - SPRING_PROFILES_ACTIVE=psql
+      - KAFKA_SERVER=broker:9092
+      - PSQL_URL=postgres-payment
+    depends_on:
+      - postgres-payment
+      - broker
+  account:
+    build:
+      context: ./
+      dockerfile: ./acme-accounts/Dockerfile
+    image: acme-services/acme-accounts
+    ports:
+      - "3002:3002"
+    environment:
+      - PORT=3002
+      - SPRING_PROFILES_ACTIVE=psql
+      - KAFKA_SERVER=broker:9092
+      - PSQL_URL=postgres-account
+    depends_on:
+      - postgres-account
+      - broker
+  postgres-payment:
+    image: postgres:alpine
+    restart: always
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=payment
+      - POSTGRES_PASSWORD=payment
+      - POSTGRES_DB=paymentdb
+  postgres-account:
+    image: postgres:alpine
+    restart: always
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=account
+      - POSTGRES_PASSWORD=account
+      - POSTGRES_DB=accountdb
   zookeeper:
     image: confluentinc/cp-zookeeper:5.3.1
     hostname: zookeeper

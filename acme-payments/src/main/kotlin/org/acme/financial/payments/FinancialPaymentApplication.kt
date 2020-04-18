@@ -15,8 +15,12 @@ import org.springframework.boot.runApplication
         "org.acme.financial.payments"
     ]
 )
-class FinancialPaymentApplication
-
-fun main(args: Array<String>) {
-    runApplication<FinancialPaymentApplication>(*args)
+class FinancialPaymentApplication {
+    companion object {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            runApplication<FinancialPaymentApplication>(*args)
+        }
+    }
 }
+
