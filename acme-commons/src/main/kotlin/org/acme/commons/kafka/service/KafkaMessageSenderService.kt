@@ -32,6 +32,8 @@ class KafkaMessageSenderService(
         private val logger = provideLogger()
     }
 
+    // Blocking bulk
+
     override fun <T> bulkSend(
         payloads: List<T>, complete: (Result<UUID>) -> Unit
     ) where T : Identity<UUID>, T : AggregateIdentity<UUID>, T : MessageTopicAware, T : MessagePayloadAware {
@@ -46,6 +48,8 @@ class KafkaMessageSenderService(
                 })
         }
     }
+
+    // Non-blocking bulk
 
     override fun <T> bulkSend(
         payloads: List<T>
@@ -63,6 +67,8 @@ class KafkaMessageSenderService(
         }
     }
 
+    // Blocking raw
+
     override fun send(topic: String, key: String, payload: String, complete: (Result<Unit>) -> Unit) {
         kafkaTemplate.send(topic, key, payload).addCallback({ _ ->
                 complete(Result.success(Unit))
@@ -71,6 +77,8 @@ class KafkaMessageSenderService(
                 complete(Result.failure(exception))
             })
     }
+
+    // Non-blocking raw
 
     override fun send(topic: String, key: String, payload: String): Mono<Unit> = Mono.defer {
         kafkaProducerTemplate.send(topic, key, payload).mapUnit()

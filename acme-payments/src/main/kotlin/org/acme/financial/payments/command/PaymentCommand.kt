@@ -1,5 +1,6 @@
 package org.acme.financial.payments.command
 
+import org.acme.commons.money.CurrencyCode
 import org.acme.commons.money.validator.annotation.Currency
 import org.acme.commons.money.validator.annotation.IBAN
 import org.acme.commons.money.beneficiary.Beneficiary
@@ -26,7 +27,7 @@ sealed class PaymentCommand(
         @Digits(integer = 9, fraction = 2)
         private val amount: BigDecimal,
 
-        @Currency(units = ["EUR"])
+        @Currency(units = [CurrencyCode.EUR, CurrencyCode.USD])
         private val currency: String,
 
         @IBAN
