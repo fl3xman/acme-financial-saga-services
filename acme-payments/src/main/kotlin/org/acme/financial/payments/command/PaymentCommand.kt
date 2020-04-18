@@ -1,5 +1,7 @@
 package org.acme.financial.payments.command
 
+import io.swagger.v3.oas.annotations.Hidden
+import io.swagger.v3.oas.annotations.media.Schema
 import org.acme.commons.money.CurrencyCode
 import org.acme.commons.money.validator.annotation.Currency
 import org.acme.commons.money.validator.annotation.IBAN
@@ -18,6 +20,7 @@ import javax.validation.constraints.Digits
  */
 
 sealed class PaymentCommand(
+    @Hidden
     val payment: Payment
 ) {
     data class TransferUsingIBAN(
@@ -27,9 +30,11 @@ sealed class PaymentCommand(
         @Digits(integer = 9, fraction = 2)
         private val amount: BigDecimal,
 
+        @Schema(allowableValues = [CurrencyCode.EUR, CurrencyCode.USD], defaultValue = CurrencyCode.EUR)
         @Currency(units = [CurrencyCode.EUR, CurrencyCode.USD])
         private val currency: String,
 
+        @Schema(defaultValue = "One of provided IBANs")
         @IBAN
         private val beneficiary: String
 
