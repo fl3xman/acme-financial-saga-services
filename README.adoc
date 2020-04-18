@@ -9,6 +9,8 @@ Supported currencies EUR, USD.
 * Kafka
 * PostgreSQL / H2
 
+== Requirements & Supported Platforms
+
 .Requirements
 * Java 11 (OpenJDK 11+)
 * Gradle 6.3 (Kotlin 1.3+)
