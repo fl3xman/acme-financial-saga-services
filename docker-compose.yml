@@ -21,7 +21,7 @@ services:
     environment:
       - PORT=3001
       - SPRING_PROFILES_ACTIVE=psql
-      - KAFKA_SERVER=broker:9092
+      - KAFKA_SERVER=broker:29092
       - PSQL_URL=postgres-payment
     depends_on:
       - postgres-payment
@@ -36,7 +36,7 @@ services:
     environment:
       - PORT=3002
       - SPRING_PROFILES_ACTIVE=psql
-      - KAFKA_SERVER=broker:9092
+      - KAFKA_SERVER=broker:29092
       - PSQL_URL=postgres-account
     depends_on:
       - postgres-account
