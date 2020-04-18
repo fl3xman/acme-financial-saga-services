@@ -9,6 +9,8 @@ CREATE TABLE account_operation(
     id                      uuid PRIMARY KEY NOT NULL,
     account_id              uuid,
     FOREIGN KEY (account_id) REFERENCES account (id),
+    transaction_id          uuid NOT NULL,
+    transaction_type        varchar(60) NOT NULL,
     transaction_currency    varchar(3) NOT NULL,
     transaction_amount      decimal(9,2) NOT NULL,
     beneficiary_value       varchar(255) NOT NULL,

@@ -5,7 +5,7 @@ import org.acme.commons.outbox.service.OutboxService
 import org.acme.commons.reactor.mapUnit
 import org.acme.financial.accounts.dto.AccountOperationDTO
 import org.acme.financial.accounts.bo.AccountSinglePaymentBO
-import org.acme.financial.accounts.domain.AccountOperationStatus
+import org.acme.financial.accounts.domain.AccountTransactionType
 import org.acme.financial.accounts.dto.AccountBalanceDTO
 import org.acme.financial.accounts.exception.AccountOperationProcessingException
 import org.acme.financial.accounts.repository.AccountOperationRepository
@@ -55,12 +55,15 @@ class AccountOperationServiceImp(
 
             val payee = accountRepository.findOneByBeneficiary(payment.beneficiary)
             val payer = accountRepository.findByIdOrNull(payment.accountId)
+            val existing = accountOperationRepository.countByTransactionIdAndTransactionType(
+                payment.id, AccountTransactionType.SINGLE_PAYMENT
+            )
             val payerBalance = accountOperationRepository.getBalanceByAccountIdAndCurrency(
                 payment.accountId, payment.transaction.currency.currencyCode
             )?.let { balance -> Money.of(balance, payment.transaction.currency) }
 
-            payment.process(topic, payee, payer, payerBalance).also {
-                if (it.payload.status == AccountOperationStatus.APPROVED) {
+            payment.process(topic, payee, payer, payerBalance, existing).also {
+                if (it.payload.status.isApproved()) {
                     accountRepository.saveAll(listOf(payee, payer))
                 }
                 outboxService.append(it)

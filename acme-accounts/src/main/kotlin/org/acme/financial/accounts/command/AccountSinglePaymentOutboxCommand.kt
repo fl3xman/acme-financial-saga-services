@@ -21,6 +21,10 @@ sealed class AccountSinglePaymentOutboxCommand(
         topic, AccountOperationResultDTO(payment, AccountOperationStatus.APPROVED)
     )
 
+    data class InvalidOperation(override val topic: String, val payment: AccountSinglePaymentBO): AccountSinglePaymentOutboxCommand(
+        topic, AccountOperationResultDTO(payment, AccountOperationStatus.REJECTED, AccountOperationReason.INSUFFICIENT_BALANCE)
+    )
+
     data class InsufficientBalance(override val topic: String, val payment: AccountSinglePaymentBO): AccountSinglePaymentOutboxCommand(
         topic, AccountOperationResultDTO(payment, AccountOperationStatus.REJECTED, AccountOperationReason.INSUFFICIENT_BALANCE)
     )
