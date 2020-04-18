@@ -9,7 +9,7 @@ Supported currencies EUR, USD.
 * Kafka
 * PostgreSQL / H2
 
-image::diagram.png[]
+image::diagram.svg[]
 
 == Requirements & Supported Platforms
 
