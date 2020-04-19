@@ -9,6 +9,6 @@ import com.fasterxml.jackson.annotation.JsonValue
  */
 
 enum class MonetaryOperationType(@JsonValue val value: String) {
-    DEPOSIT("deposit"),
-    WITHDRAW("withdraw")
+    DEPOSIT("DEPOSIT"),
+    WITHDRAW("WITHDRAW")
 }

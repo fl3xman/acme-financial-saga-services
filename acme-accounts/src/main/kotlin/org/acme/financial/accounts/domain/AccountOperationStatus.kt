@@ -8,9 +8,9 @@ import com.fasterxml.jackson.annotation.JsonValue
  * @author fl3xman
  */
 enum class AccountOperationStatus(@JsonValue val value: String) {
-    PENDING("pending"),
-    APPROVED("approved"),
-    REJECTED("rejected");
+    PENDING("PENDING"),
+    APPROVED("APPROVED"),
+    REJECTED("REJECTED");
 
     fun isApproved(): Boolean = this == APPROVED
 }

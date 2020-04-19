@@ -61,6 +61,7 @@ data class Payment(
     @Column(name = "created_at")
     var createdAt: LocalDateTime? = null,
 
+    @JsonIgnore
     @JsonFormat(pattern = DatetimeFormat.ZONED)
     @LastModifiedDate
     @Column(name = "modified_at")

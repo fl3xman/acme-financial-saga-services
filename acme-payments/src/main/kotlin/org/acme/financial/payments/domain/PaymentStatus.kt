@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonValue
  * @author fl3xman
  */
 enum class PaymentStatus(@JsonValue val value: String) {
-    PENDING("pending"),
-    APPROVED("approved"),
-    REJECTED("rejected")
+    PENDING("PENDING"),
+    APPROVED("APPROVED"),
+    REJECTED("REJECTED")
 }

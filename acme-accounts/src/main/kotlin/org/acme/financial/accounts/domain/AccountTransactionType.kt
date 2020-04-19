@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonValue
  * @author fl3xman
  */
 enum class AccountTransactionType(@JsonValue val value: String) {
-    SINGLE_PAYMENT("single_payment"),
-    BULK_PAYMENT("bulk_payment"),
-    LOCAL_DEPOSIT("local_deposit")
+    SINGLE_PAYMENT("SINGLE_PAYMENT"),
+    BULK_PAYMENT("BULK_PAYMENT"),
+    LOCAL_DEPOSIT("LOCAL_DEPOSIT")
 }
