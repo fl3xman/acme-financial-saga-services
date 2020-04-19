@@ -33,7 +33,7 @@ data class AccountSinglePaymentBO(
             existing > 0 ->                 AccountSinglePaymentOutboxCommand.InvalidOperation(topic, this)
             payee == null ->                AccountSinglePaymentOutboxCommand.InvalidAccount(topic, this)
             payer == null ->                AccountSinglePaymentOutboxCommand.InvalidAccount(topic, this)
-            payee?.id == accountId ->       AccountSinglePaymentOutboxCommand.InvalidBeneficiary(topic, this)
+            payee.id == accountId ->        AccountSinglePaymentOutboxCommand.InvalidBeneficiary(topic, this)
             payerBalance == null ->         AccountSinglePaymentOutboxCommand.InvalidBalance(topic, this)
             payerBalance < transaction ->   AccountSinglePaymentOutboxCommand.InsufficientBalance(topic, this)
             else -> {
