@@ -1,4 +1,4 @@
-package org.acme.financial.api.openapi.configuration
+package org.acme.financial.api.configuration
 
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType

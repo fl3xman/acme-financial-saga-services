@@ -5,17 +5,24 @@ services:
       context: ./
       dockerfile: ./acme-api-gateway/Dockerfile
     image: acme-services/acme-api-gateway
+    hostname: api
+    container_name: acme-api
     ports:
       - "3000:3000"
     environment:
       - PORT=3000
+      - REDIS_SERVER=redis
       - ROOT_PAYMENT=http://payment:3001
       - ROOT_ACCOUNT=http://account:3002
+    depends_on:
+      - redis
   payment:
     build:
       context: ./
       dockerfile: ./acme-payments/Dockerfile
     image: acme-services/acme-payments
+    hostname: payment
+    container_name: acme-payment
     ports:
       - "3001:3001"
     environment:
@@ -31,6 +38,8 @@ services:
       context: ./
       dockerfile: ./acme-accounts/Dockerfile
     image: acme-services/acme-accounts
+    hostname: account
+    container_name: acme-account
     ports:
       - "3002:3002"
     environment:
@@ -41,6 +50,7 @@ services:
     depends_on:
       - postgres-account
       - broker
+
   postgres-payment:
     image: postgres:alpine
     restart: always
@@ -59,6 +69,16 @@ services:
       - POSTGRES_USER=account
       - POSTGRES_PASSWORD=account
       - POSTGRES_DB=accountdb
+
+  redis:
+    image: redis:alpine
+    hostname: redis
+    container_name: redis
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_REPLICATION_MODE=master
+      - ALLOW_EMPTY_PASSWORD=yes
   zookeeper:
     image: confluentinc/cp-zookeeper:5.3.1
     hostname: zookeeper

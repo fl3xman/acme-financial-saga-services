@@ -5,9 +5,10 @@ Sample project to demonstrate usage of orchestrated (via Kafka) microservice SAG
 Supported currencies EUR, USD.
 
 .Composition
-* Spring Boot Webflux microservices (using Non-blocking Kafka prod/cons)
+* Spring Cloud - API Gateway with filters (rate-limit, circuit-breaker)
+* Spring Boot - Webflux microservices (using Non-blocking Kafka prod/cons)
 * Kafka
-* PostgreSQL / H2
+* PostgreSQL / H2 (Blocking drivers)
 
 image::diagram.svg[]
 
@@ -28,7 +29,7 @@ image::diagram.svg[]
 .Run using docker
 [source,bash]
 ----
-docker-compose up -d
+docker-compose up -d --build
 ----
 
 .Run using IDE
@@ -47,15 +48,13 @@ Use one of supported accounts:
 
 .Accounts (Basic auth)
 |===
-|Username |Password |IBAN
+|Username / IBAN |Password
 
 |AT483200000000000001
 |password
-|AT483200000000000001
 
 |AT483200000000000002
 |password
-|AT483200000000000002
 |===
 
 == References

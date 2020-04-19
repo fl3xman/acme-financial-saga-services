@@ -40,7 +40,7 @@ sealed class PaymentCommand(
 
     ) : PaymentCommand(
         Payment(
-            transaction = Money.of(amount, currency),
+            transaction = Money.of(amount.abs(), currency),
             beneficiary = Beneficiary(beneficiary)
         )
     )
