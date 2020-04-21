@@ -17,11 +17,19 @@ spring:
       group-id: ${KAFKA_PAYMENT_GROUP_ID:payment_group_id}
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      # Uncomment to use string deserializer instead
+      # value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     producer:
       bootstrap-servers: ${KAFKA_SERVER:localhost:9092}
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      # Uncomment to use string serializer instead
+      # value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    # Schema registry
+    auto.register.schemas: true
+    schema.registry.url: ${KAFKA_SCHEMA_SERVER:localhost:8081}
+    value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicNameStrategy
 
 logging:
   level:

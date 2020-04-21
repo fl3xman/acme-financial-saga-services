@@ -1,0 +1,73 @@
+{
+  "namespace": "org.acme.financial.payments.avro",
+  "name": "SinglePaymentTransmit",
+  "type": "record",
+  "fields": [
+    {
+      "name": "id",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      }
+    },
+    {
+      "name": "accountId",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      }
+    },
+    {
+      "name": "transaction",
+      "type": {
+        "name": "PaymentTransactionTransmit",
+        "type": "record",
+        "fields": [
+          {
+            "name": "amount",
+            "type": {
+              "type": "bytes",
+              "logicalType": "decimal",
+              "precision": 9,
+              "scale": 2
+            }
+          },
+          {
+            "name": "currency",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "beneficiary",
+      "type": {
+        "namespace": "org.acme.financial.commons.money.avro",
+        "name": "BeneficiaryTransmit",
+        "type": "record",
+        "fields": [
+          {
+            "name": "value",
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "status",
+      "type": {
+        "type": "enum",
+        "name": "PaymentStatusTransmit",
+        "symbols" : ["PENDING", "APPROVED", "REJECTED"]
+      }
+    },
+    {
+      "name": "createdAt",
+      "type": "string"
+    }
+  ]
+}

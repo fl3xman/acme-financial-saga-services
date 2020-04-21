@@ -10,6 +10,10 @@ tasks {
     }
 }
 
+avro {
+
+}
+
 dependencies {
     // Align versions of all Kotlin components
     api(platform("org.jetbrains.kotlin:kotlin-bom"))
@@ -31,6 +35,9 @@ dependencies {
     api("org.springframework.boot:spring-boot-starter-webflux")
     api("org.springframework.boot:spring-boot-starter-security")
     api("org.springframework.boot:spring-boot-starter-actuator")
+
+    api("org.apache.avro:avro:1.9.2")
+    api("io.confluent:kafka-avro-serializer:5.4.1")
 
     api("org.springdoc:springdoc-openapi-webflux-core:1.3.2")
     api("org.springdoc:springdoc-openapi-kotlin:1.3.2")

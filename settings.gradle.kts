@@ -7,8 +7,9 @@ include("acme-api-gateway")
 
 pluginManagement {
     repositories {
-        maven { url = uri("https://repo.spring.io/milestone") }
         gradlePluginPortal()
+        maven { url = uri("https://repo.spring.io/milestone") }
+        maven { url = uri("https://dl.bintray.com/gradle/gradle-plugins") }
     }
 
     resolutionStrategy {

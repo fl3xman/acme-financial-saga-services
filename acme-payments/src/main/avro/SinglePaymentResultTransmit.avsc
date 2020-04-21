@@ -1,0 +1,26 @@
+{
+  "namespace": "org.acme.financial.payments.avro",
+  "name": "SinglePaymentResultTransmit",
+  "type": "record",
+  "fields": [
+    {
+      "name": "id",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      }
+    },
+    {
+      "name": "status",
+      "type": {
+        "type": "enum",
+        "name": "PaymentStatusTransmit",
+        "symbols" : ["PENDING", "APPROVED", "REJECTED"]
+      }
+    },
+    {
+      "name": "reason",
+      "type": ["null", "string"]
+    }
+  ]
+}

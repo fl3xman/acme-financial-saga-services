@@ -2,6 +2,7 @@ plugins {
 
     id("org.springframework.boot") version "2.2.6.RELEASE"
     id("io.spring.dependency-management") version "1.0.9.RELEASE"
+    id("com.commercehub.gradle.plugin.avro") version "0.19.1"
 
     kotlin("jvm") version "1.3.71"
     kotlin("plugin.noarg") version "1.3.71"
@@ -13,6 +14,7 @@ plugins {
 repositories {
     mavenCentral()
     maven { url = uri("https://repo.spring.io/milestone") }
+    maven { url = uri("http://packages.confluent.io/maven") }
 }
 
 subprojects {
@@ -25,10 +27,12 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlin.plugin.jpa")
     apply(plugin = "org.springframework.boot")
     apply(plugin = "io.spring.dependency-management")
+    apply(plugin = "com.commercehub.gradle.plugin.avro")
 
     repositories {
         mavenCentral()
         maven { url = uri("https://repo.spring.io/milestone") }
+        maven { url = uri("http://packages.confluent.io/maven") }
     }
 
     java {
