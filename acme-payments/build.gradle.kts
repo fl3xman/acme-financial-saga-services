@@ -1,5 +1,4 @@
 import org.springframework.boot.gradle.tasks.bundling.BootJar
-import com.commercehub.gradle.plugin.avro.GenerateAvroJavaTask
 
 springBoot {
     mainClassName = "org.acme.financial.payments.FinancialPaymentApplication"

@@ -42,7 +42,7 @@
     {
       "name": "beneficiary",
       "type": {
-        "namespace": "org.acme.financial.commons.money.avro",
+        "namespace": "org.acme.commons.money.avro",
         "name": "BeneficiaryTransmit",
         "type": "record",
         "fields": [

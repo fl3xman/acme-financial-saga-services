@@ -10,6 +10,6 @@ data class MessageDeadLetter(
     val payload: String
 ) {
     constructor(exception: Throwable, payload: String): this(
-        exception.cause?.message ?: (exception.message?: ""), payload
+        exception.cause?.message ?: (exception.message?: "unknown"), payload
     )
 }

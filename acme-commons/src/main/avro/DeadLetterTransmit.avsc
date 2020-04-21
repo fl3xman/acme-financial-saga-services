@@ -1,0 +1,15 @@
+{
+  "namespace": "org.acme.commons.message.avro",
+  "name": "DeadLetterTransmit",
+  "type": "record",
+  "fields": [
+    {
+      "name": "exception",
+      "type": "string"
+    },
+    {
+      "name": "payload",
+      "type": "string"
+    }
+  ]
+}
