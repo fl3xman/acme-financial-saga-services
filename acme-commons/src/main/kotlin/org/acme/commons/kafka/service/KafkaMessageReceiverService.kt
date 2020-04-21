@@ -2,7 +2,7 @@ package org.acme.commons.kafka.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.acme.commons.logging.provideLogger
-import org.acme.commons.message.MessageDeadLetter
+import org.acme.commons.message.DeadLetter
 import org.acme.commons.message.service.MessageReceiverService
 import org.acme.commons.message.service.MessageSenderService
 import org.acme.commons.reactor.mapUnit
@@ -88,7 +88,7 @@ class KafkaMessageReceiverService(
     ): Mono<Unit> {
         return topicDLQ?.let {
             messageSenderService.send(it, record.key(), objectMapper.writeValueAsString(
-                MessageDeadLetter(exception, record.value())
+                DeadLetter(exception, record.value())
             ))
         } ?: Mono.empty()
     }

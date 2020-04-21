@@ -2,10 +2,10 @@ package org.acme.commons.kafka.service.schema
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.acme.commons.logging.provideLogger
-import org.acme.commons.message.MessageDeadLetter
-import org.acme.commons.message.service.schema.DeadLetterMessageSenderService
-import org.acme.commons.message.service.schema.SchemaMessageReceiverService
+import org.acme.commons.message.DeadLetter
+import org.acme.commons.message.service.schema.SchemaReceiverService
 import org.acme.commons.reactor.mapUnit
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties
 import org.springframework.kafka.core.reactive.ReactiveKafkaConsumerTemplate
 import reactor.core.publisher.Flux
@@ -21,11 +21,12 @@ import java.time.Duration
  * @project acme-payment-saga-services
  * @author fl3xman
  */
-abstract class KafkaSchemaMessageReceiverService<Schema>(
-    private val kafkaProperties: KafkaProperties,
-    private val objectMapper: ObjectMapper,
-    private val deadLetterMessageSenderService: DeadLetterMessageSenderService
-): SchemaMessageReceiverService<Schema> {
+
+open class KafkaSchemaReceiverService<Schema>(
+    @Autowired private val kafkaProperties: KafkaProperties,
+    @Autowired private val objectMapper: ObjectMapper,
+    @Autowired private val deadLetterSenderService: DeadLetterSenderService
+): SchemaReceiverService<Schema> {
 
     companion object {
         @JvmStatic
@@ -65,23 +66,23 @@ abstract class KafkaSchemaMessageReceiverService<Schema>(
                             }
                     ).onErrorResume { exception ->
                         logger.error("Record processing will redrive after retries=${maxRetry} with error=${exception}")
-                        redriveBy(topicWithDLQ.second, record, exception).then()
+                        topicWithDLQ.second?.let { dlq ->
+                            redriveBy(dlq, record, exception).then()
+                        } ?: Mono.empty()
+
                     }
                 }
             }.mapUnit()
     }
 
     private fun redriveBy(
-        topicDLQ: String?,
+        topicDLQ: String,
         record: ReceiverRecord<String, Schema>,
         exception: Throwable
     ): Mono<Unit> {
-        return topicDLQ?.let {
-            deadLetterMessageSenderService.send(it, record.key(), MessageDeadLetter(
-                    exception, objectMapper.writeValueAsString(record.value())
-                )
-            )
-        } ?: Mono.empty()
+        return deadLetterSenderService.send(topicDLQ, record.key(), DeadLetter(
+            exception, objectMapper.writeValueAsString(record.value())
+        ))
     }
 
     private fun templateBy(topic: String): ReactiveKafkaConsumerTemplate<String, Schema> {

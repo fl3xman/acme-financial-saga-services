@@ -4,10 +4,11 @@ import org.acme.commons.domain.AggregateIdentity
 import org.acme.commons.domain.Identity
 import org.acme.commons.logging.provideLogger
 import org.acme.commons.message.MessageTopicAware
-import org.acme.commons.message.schema.SchemaMessagePayloadAware
-import org.acme.commons.message.service.schema.SchemaMessageSenderService
+import org.acme.commons.message.schema.SchemaPayloadAware
+import org.acme.commons.message.service.schema.SchemaSenderService
 import org.acme.commons.reactor.mapUnit
 import org.apache.kafka.clients.producer.ProducerRecord
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.kafka.core.reactive.ReactiveKafkaProducerTemplate
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -19,9 +20,9 @@ import java.util.*
  * @project acme-payment-saga-services
  * @author fl3xman
  */
-abstract class KafkaSchemaMessageSenderService<Schema>(
-    private val schemaProducerTemplate: ReactiveKafkaProducerTemplate<String, Schema>
-): SchemaMessageSenderService<Schema> {
+open class KafkaSchemaSenderService<Schema>(
+    @Autowired private val schemaTemplate: ReactiveKafkaProducerTemplate<String, Schema>
+): SchemaSenderService<Schema> {
 
     companion object {
         @JvmStatic
@@ -30,8 +31,8 @@ abstract class KafkaSchemaMessageSenderService<Schema>(
 
     override fun <T> bulkSend(
         payloads: List<T>
-    ): Flux<Result<UUID>> where T : Identity<UUID>, T : AggregateIdentity<UUID>, T : MessageTopicAware, T : SchemaMessagePayloadAware<Schema> {
-        return schemaProducerTemplate.send(Flux.fromIterable(payloads.map {
+    ): Flux<Result<UUID>> where T : Identity<UUID>, T : AggregateIdentity<UUID>, T : MessageTopicAware, T : SchemaPayloadAware<Schema> {
+        return schemaTemplate.send(Flux.fromIterable(payloads.map {
             SenderRecord.create(
                 ProducerRecord(it.topic, it.aggregateId.toString(), it.schemaPayload),
                 it.id
@@ -45,6 +46,6 @@ abstract class KafkaSchemaMessageSenderService<Schema>(
     }
 
     override fun send(topic: String, key: String, schema: Schema): Mono<Unit> {
-        return schemaProducerTemplate.send(topic, key, schema).mapUnit()
+        return schemaTemplate.send(topic, key, schema).mapUnit()
     }
 }

@@ -1,6 +1,6 @@
 {
   "namespace": "org.acme.financial.payments.avro",
-  "name": "SinglePaymentResultTransmit",
+  "name": "PaymentResultSchema",
   "type": "record",
   "fields": [
     {
@@ -14,7 +14,7 @@
       "name": "status",
       "type": {
         "type": "enum",
-        "name": "PaymentStatusTransmit",
+        "name": "PaymentStatusSchema",
         "symbols" : ["PENDING", "APPROVED", "REJECTED"]
       }
     },

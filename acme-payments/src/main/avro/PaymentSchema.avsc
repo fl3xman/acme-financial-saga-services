@@ -1,6 +1,6 @@
 {
   "namespace": "org.acme.financial.payments.avro",
-  "name": "SinglePaymentTransmit",
+  "name": "PaymentSchema",
   "type": "record",
   "fields": [
     {
@@ -20,7 +20,7 @@
     {
       "name": "transaction",
       "type": {
-        "name": "PaymentTransactionTransmit",
+        "name": "PaymentTransactionSchema",
         "type": "record",
         "fields": [
           {
@@ -43,7 +43,7 @@
       "name": "beneficiary",
       "type": {
         "namespace": "org.acme.commons.money.avro",
-        "name": "BeneficiaryTransmit",
+        "name": "BeneficiarySchema",
         "type": "record",
         "fields": [
           {
@@ -61,13 +61,9 @@
       "name": "status",
       "type": {
         "type": "enum",
-        "name": "PaymentStatusTransmit",
+        "name": "PaymentStatusSchema",
         "symbols" : ["PENDING", "APPROVED", "REJECTED"]
       }
-    },
-    {
-      "name": "createdAt",
-      "type": "string"
     }
   ]
 }

@@ -1,20 +1,14 @@
 package org.acme.financial.payments.configuration
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.acme.commons.kafka.service.KafkaMessageReceiverService
-import org.acme.commons.kafka.service.KafkaMessageSenderService
-import org.acme.commons.kafka.service.schema.KafkaDeadLetterMessageSenderService
-import org.acme.commons.kafka.service.schema.KafkaSchemaMessageReceiverService
-import org.acme.commons.message.avro.DeadLetterTransmit
-import org.acme.commons.message.service.MessageReceiverService
-import org.acme.commons.message.service.MessageSenderService
-import org.acme.commons.message.service.schema.DeadLetterMessageSenderService
-import org.acme.commons.message.service.schema.SchemaMessageReceiverService
-import org.acme.commons.message.service.schema.SchemaMessageSenderService
-import org.acme.financial.payments.avro.SinglePaymentResultTransmit
-import org.acme.financial.payments.avro.SinglePaymentTransmit
-import org.acme.financial.payments.service.PaymentMessageReceiverService
-import org.acme.financial.payments.service.PaymentMessageSenderService
+import org.acme.commons.kafka.service.schema.DeadLetterSenderService
+import org.acme.commons.kafka.service.schema.KafkaSchemaReceiverService
+import org.acme.commons.kafka.service.schema.KafkaSchemaSenderService
+import org.acme.commons.message.avro.DeadLetterSchema
+import org.acme.commons.message.service.schema.SchemaReceiverService
+import org.acme.commons.message.service.schema.SchemaSenderService
+import org.acme.financial.payments.avro.PaymentResultSchema
+import org.acme.financial.payments.avro.PaymentSchema
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -31,31 +25,36 @@ import reactor.kafka.sender.SenderOptions
 class MessageConfiguration {
 
     @Bean
-    fun schemaProducerTemplate(kafkaProperties: KafkaProperties): ReactiveKafkaProducerTemplate<String, SinglePaymentTransmit> =
+    fun schemaTemplate(kafkaProperties: KafkaProperties): ReactiveKafkaProducerTemplate<String, PaymentSchema> =
         ReactiveKafkaProducerTemplate(
             SenderOptions.create(kafkaProperties.buildProducerProperties())
         )
 
     @Bean
-    fun deadLetterProducerTemplate(kafkaProperties: KafkaProperties): ReactiveKafkaProducerTemplate<String, DeadLetterTransmit> =
+    fun schemaSenderService(
+        schemaTemplate: ReactiveKafkaProducerTemplate<String, PaymentSchema>
+    ): SchemaSenderService<PaymentSchema> = KafkaSchemaSenderService(schemaTemplate)
+
+    @Bean
+    fun deadLetterTemplate(kafkaProperties: KafkaProperties): ReactiveKafkaProducerTemplate<String, DeadLetterSchema> =
         ReactiveKafkaProducerTemplate(
             SenderOptions.create(kafkaProperties.buildProducerProperties())
         )
 
     @Bean
-    fun schemaMessageSenderService(
-        schemaProducerTemplate: ReactiveKafkaProducerTemplate<String, SinglePaymentTransmit>
-    ): SchemaMessageSenderService<SinglePaymentTransmit> = PaymentMessageSenderService(schemaProducerTemplate)
+    fun deadLetterSenderService(
+        deadLetterTemplate: ReactiveKafkaProducerTemplate<String, DeadLetterSchema>
+    ): DeadLetterSenderService = DeadLetterSenderService(deadLetterTemplate)
 
     @Bean
-    fun deadLetterMessageSenderService(
-        deadLetterProducerTemplate: ReactiveKafkaProducerTemplate<String, DeadLetterTransmit>
-    ): DeadLetterMessageSenderService = KafkaDeadLetterMessageSenderService(deadLetterProducerTemplate)
-
-    @Bean
-    fun schemaMessageReceiverService(
+    fun schemaReceiverService(
         kafkaProperties: KafkaProperties,
         objectMapper: ObjectMapper,
-        deadLetterMessageSenderService: DeadLetterMessageSenderService
-    ): SchemaMessageReceiverService<SinglePaymentResultTransmit> = PaymentMessageReceiverService(kafkaProperties, objectMapper, deadLetterMessageSenderService)
+        deadLetterSenderService: DeadLetterSenderService
+    ): SchemaReceiverService<PaymentResultSchema> =
+        KafkaSchemaReceiverService<PaymentResultSchema>(
+            kafkaProperties,
+            objectMapper,
+            deadLetterSenderService
+        )
 }

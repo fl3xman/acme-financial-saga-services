@@ -5,7 +5,7 @@ package org.acme.commons.message
  * @project acme-payment-saga-services
  * @author fl3xman
  */
-data class MessageDeadLetter(
+data class DeadLetter(
     val exception: String,
     val payload: String
 ) {

@@ -1,6 +1,6 @@
 {
   "namespace": "org.acme.commons.message.avro",
-  "name": "DeadLetterTransmit",
+  "name": "DeadLetterSchema",
   "type": "record",
   "fields": [
     {

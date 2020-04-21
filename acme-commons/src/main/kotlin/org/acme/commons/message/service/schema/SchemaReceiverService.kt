@@ -9,7 +9,7 @@ import java.time.Duration
  * @project acme-payment-saga-services
  * @author fl3xman
  */
-interface SchemaMessageReceiverService<Schema> {
+interface SchemaReceiverService<Schema> {
 
     fun on(
         topic: String,
