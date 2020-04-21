@@ -4,6 +4,8 @@
 Sample project to demonstrate usage of orchestrated (via Kafka) microservice SAGA + Outbox(Polling) patterns. Project based on Spring Boot Webflux framework using non-blocking code until SQL data storage (JPA part is blocking).
 Supported currencies EUR, USD.
 
+Implementation with support of `schema-registry` can be found link:https://github.com/fl3xman/acme-financial-saga-services/tree/schema-registry[here].
+
 .Composition
 * Spring Cloud - API Gateway with filters (rate-limit, circuit-breaker)
 * Spring Boot - Webflux microservices (using Non-blocking Kafka prod/cons)
