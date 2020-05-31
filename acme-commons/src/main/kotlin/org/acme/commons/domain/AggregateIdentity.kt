@@ -1,5 +1,7 @@
 package org.acme.commons.domain
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+
 /**
  *
  * @project acme-payment-saga-services
@@ -7,5 +9,6 @@ package org.acme.commons.domain
  */
 
 interface AggregateIdentity<ID> {
+    @get:JsonIgnore
     val aggregateId: ID
 }
