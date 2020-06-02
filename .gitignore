@@ -27,5 +27,22 @@ HELP.md
 /nbdist/
 /.nb-gradle/
 
+
 ### VS Code ###
 .vscode/
+dist
+
+### Terraform ###
+*tfstate*
+.terraform
+*.swp
+*.plan
+*.tfplan
+*-env/*
+temp.yaml
+
+### Node ###
+node_modules
+.history
+.grunt
+*.env

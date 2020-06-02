@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "acme-facade"
+		},
+		{
+			"path": "acme-accounts"
+		},
+		{
+			"path": "acme-commons"
+		},
+		{
+			"path": "acme-payments"
+		}
+	],
+	"settings": {}
+}

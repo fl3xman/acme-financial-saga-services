@@ -1,0 +1,6 @@
+mediator:
+  acme:
+    payment:
+      host: "http://locahost:3002"
+    account:
+      host: "http://locahost:3002"
