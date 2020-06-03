@@ -1,4 +1,3 @@
-const Webpack = require("webpack");
 const common = require("./common.config");
 
 module.exports = () => {
@@ -10,19 +9,9 @@ module.exports = () => {
         watch: true,
         devServer: {
             host: "0.0.0.0",
-            port: 3000,
+            port: 4000,
             historyApiFallback: true,
             publicPath: "/",
-        },
-
-        plugins: [
-            ...common().plugins,
-
-            new Webpack.DefinePlugin({
-                "process.env": {
-                    "LOGGER_LEVEL": "debug"
-                }
-            }),
-        ]
+        }
     }
 };

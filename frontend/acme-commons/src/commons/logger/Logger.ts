@@ -1,7 +1,7 @@
 export interface Logger {
-    trace(message: any, ...args: any[]): void;
-    debug(message: any, ...args: any[]): void;
-    info(message: any, ...args: any[]): void;
-    warn(message: any, ...args: any[]): void;
-    error(message: any, ...args: any[]): void;
+    trace(message: unknown, ...args: unknown[]): void;
+    debug(message: unknown, ...args: unknown[]): void;
+    info(message: unknown, ...args: unknown[]): void;
+    warn(message: unknown, ...args: unknown[]): void;
+    error(message: unknown, ...args: unknown[]): void;
 }

@@ -1,3 +1,3 @@
 import { Logger } from "./Logger";
 
-export type LoggerFactory = ((category?: string) => Logger)
+export type LoggerFactory = (category?: string) => Logger;

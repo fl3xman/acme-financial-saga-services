@@ -9,8 +9,7 @@ import { ManifestAssembly, ManifestBuilderFactory } from "../manifest";
 
 import { MediatorProps } from "./MediatorProps";
 
-export const Mediator: React.FC<MediatorProps> = (props) => {
-
+export const Mediator: React.FC<MediatorProps> = (props: MediatorProps) => {
     const [joinId] = useState(`${props.namespace}-${props.name}-joinpoint`);
     const [scriptId] = useState(`${joinId}-script`);
 
@@ -31,10 +30,9 @@ export const Mediator: React.FC<MediatorProps> = (props) => {
                 .get<ManifestBuilderFactory>(ManifestAssembly.BuilderFactory)(host, joinId)
                 .subscribe({
                     complete: () => {
-
                         logger?.debug(`Mediator ${namespace}:${name} will mount.`);
                         useJoinPoint(namespace, name).mount(joinId, history, container.createChild());
-                    }
+                    },
                 });
 
             return () => {
@@ -48,11 +46,9 @@ export const Mediator: React.FC<MediatorProps> = (props) => {
             const { namespace, name } = props;
 
             logger?.debug(`Mediator ${namespace}:${name} will unmount.`);
-            useJoinPoint(namespace, name).unmount(joinId)
+            useJoinPoint(namespace, name).unmount(joinId);
         };
     }, [props]);
 
-    return (
-        <main id={joinId} />
-    );
-}
+    return <main id={joinId} />;
+};

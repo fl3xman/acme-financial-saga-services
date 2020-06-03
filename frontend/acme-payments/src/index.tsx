@@ -1,16 +1,18 @@
+import * as H from "history";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import { useJoinPoint } from "acme-commons";
+import { interfaces } from "inversify";
+import { useJoinPoint, guard } from "acme-commons";
 
 import { Payment } from "./Payment";
-import { PaymentJoinId } from "./PaymentJoinId";
 
-useJoinPoint(PaymentJoinId.Namespace, PaymentJoinId.Name).mount = (id, history, container) => {
-    ReactDOM.render(<Payment id={id} history={history} container={container} />, document.getElementById(id));
-    // registerServiceWorker();
-};
-
-useJoinPoint(PaymentJoinId.Namespace, PaymentJoinId.Name).unmount = (id) => {
-    ReactDOM.unmountComponentAtNode(document.getElementById(id));
-};
+useJoinPoint("acme", "payment", {
+    mount: (id: string, history: H.History, container: interfaces.Container) => {
+        ReactDOM.render(<Payment id={id} history={history} container={container} />, document.getElementById(id));
+        // registerServiceWorker();
+    },
+    unmount: (id) => {
+        guard(document.getElementById(id), (safe) => ReactDOM.unmountComponentAtNode(safe));
+    },
+});

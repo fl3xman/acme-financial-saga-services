@@ -9,10 +9,10 @@ export const defaultStyleManifestBuilder = (built: ManifestBuildAware): Observab
         if (keyTypeOf(built.manifest, ManifestAttribute.MainStyle)) {
             const link = document.createElement("link");
             link.id = `${built.id}-style`;
-            link.rel = "stylesheet"
-            link.href = `${built.url}/${built.manifest[ManifestAttribute.MainStyle]}`;
+            link.rel = "stylesheet";
+            link.href = `${built.url}${built.manifest[ManifestAttribute.MainStyle]}`;
             link.onload = () => {
-                built.logger?.debug(`Manifest style=${built.id} built successfully.`)
+                built.logger?.debug(`Manifest style=${built.id} built successfully.`);
                 subscribe.complete();
             };
 
@@ -22,4 +22,4 @@ export const defaultStyleManifestBuilder = (built: ManifestBuildAware): Observab
             subscribe.complete();
         }
     });
-}
+};

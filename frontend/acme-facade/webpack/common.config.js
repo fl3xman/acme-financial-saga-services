@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { join, resolve } = require("path");
+const Webpack = require("webpack");
+const { resolve } = require("path");
 
 module.exports = () => {
     const base = {};
@@ -13,8 +14,21 @@ module.exports = () => {
     base.node = { console: false, fs: "empty", net: "empty", tls: "empty" };
     base.module = {
         rules: [
-            { test: /\.tsx?$/, loader: "ts-loader", options: { allowTsInNodeModules: true } },
-            { test: /\.yaml$/, use: "js-yaml-loader" }
+            {
+                test: /\.tsx?$/,
+                use: [
+                    {
+                        loader: 'ts-loader',
+                        options: {
+                            allowTsInNodeModules: true
+                        }
+                    }
+                ]
+            },
+            {
+                test: /\.yaml$/,
+                use: "js-yaml-loader"
+            }
         ],
     };
     base.optimization = {
@@ -43,7 +57,12 @@ module.exports = () => {
             filename: "index.html",
             assets: "assets",
             inject: true,
-        })
+        }),
+        new Webpack.DefinePlugin({
+            "process.env": {
+                "LOGGER_LEVEL": JSON.stringify("debug"),
+            }
+        }),
     ];
 
     return base;

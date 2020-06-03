@@ -9,9 +9,9 @@ export const defaultScriptManifestBuilder = (build: ManifestBuildAware): Observa
         if (keyTypeOf(build.manifest, ManifestAttribute.MainScript)) {
             const script = document.createElement("script");
             script.id = `${build.id}-script`;
-            script.src = `${build.url}/${build.manifest[ManifestAttribute.MainScript]}`;
+            script.src = `${build.url}${build.manifest[ManifestAttribute.MainScript]}`;
             script.onload = () => {
-                build.logger?.debug(`Manifest script=${build.id} built successfully.`)
+                build.logger?.debug(`Manifest script=${build.id} built successfully.`);
                 subscribe.complete();
             };
 

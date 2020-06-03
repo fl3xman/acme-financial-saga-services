@@ -5,4 +5,4 @@ export interface InversifyProviderProps {
     container?: interfaces.Container;
     configurations?: interfaces.ContainerModule[];
     asyncConfigurations?: interfaces.AsyncContainerModule[];
-};
+}

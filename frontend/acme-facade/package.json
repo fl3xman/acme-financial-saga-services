@@ -1,15 +1,17 @@
 {
   "name": "acme-facade",
   "version": "1.0.0",
-  "description": "ACME application shell.",
+  "description": "ACME shell application.",
   "main": "src/index.tsx",
   "scripts": {
-    "start": "./node_modules/.bin/webpack-dev-server --progress --config webpack/development.config.js"
+    "start": "./node_modules/.bin/webpack-dev-server --progress --config webpack/development.config.js",
+    "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix"
   },
   "author": "fl3xman",
   "license": "MIT",
   "dependencies": {
     "acme-commons": "../acme-commons",
+    "dotenv": "^8.2.0",
     "inversify": "^5.0.1",
     "lodash": "^4.17.15",
     "react": "^16.13.1",
@@ -17,18 +19,25 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "reflect-metadata": "^0.1.13",
-    "winston": "^3.2.1"
+    "rxjs": "^6.5.5",
+    "typescript-logging": "^0.6.4"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.154",
-    "@types/node": "^14.0.6",
+    "@types/node": "^14.0.9",
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
     "@types/react-router": "^5.1.7",
     "@types/react-router-dom": "^5.1.5",
+    "@typescript-eslint/eslint-plugin": "^3.1.0",
+    "@typescript-eslint/parser": "^3.1.0",
+    "eslint": "^7.1.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.3",
+    "eslint-plugin-react": "^7.20.0",
     "html-webpack-plugin": "^4.3.0",
     "js-yaml-loader": "^1.2.2",
-    "rxjs": "^6.5.5",
+    "prettier": "^2.0.5",
     "ts-loader": "^7.0.5",
     "typescript": "^3.9.3",
     "webpack": "^4.43.0",

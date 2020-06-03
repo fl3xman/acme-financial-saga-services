@@ -15,34 +15,32 @@ import { defaultScriptManifestBuilder, defaultStyleManifestBuilder } from "../bu
 
 export const autoconfigure = (): ContainerModule => {
     return new ContainerModule((bind, _, isBound) => {
-
         // Autoconfigurtion checks for bindings
         if (!isBound(ManifestAssembly.Factory)) {
-            bind<interfaces.Factory<ManifestLoaderFactory>>(ManifestAssembly.Factory)
-                .toFactory<Observable<Manifest>>((ctx) => (url: string) => {
-
+            bind<interfaces.Factory<ManifestLoaderFactory>>(ManifestAssembly.Factory).toFactory<Observable<Manifest>>(
+                (ctx) => (host: string) => {
                     const logger = inversifyOptionalGet<LoggerFactory>(ctx.container, LoggerAssembly.Factory)?.(LoggerTag.Manifest);
-                    return defer(() => from(fetch(url))).pipe(
-                        concatMap((response) => from(from(response.json))),
+                    return defer(() => from(fetch(`${host}/manifest.json`))).pipe(
+                        concatMap((response) => from(from(response.json()))),
                         map((json) => {
                             if (keyTypeOf<Manifest, AnyManifestAttribute>(json, ManifestAttribute.MainScript)) {
                                 return json;
                             }
-                            throw TypeError(`Fetched json response=${json} is not Manifest.`);
+                            throw TypeError(`Fetched json response=${JSON.stringify(json)} is not Manifest.`);
                         }),
                         tap({
-                            next: (result) => logger?.debug(`Manifest loader result=${result}.`),
-                            error: (error) => logger?.error(`Manifest loader failed with error=${error}.`),
+                            next: (result) => logger?.debug(`Manifest loader result = ${JSON.stringify(result)}`),
+                            error: (error) => logger?.error(`Manifest loader failed with error=${JSON.stringify(error)}.`),
                         }),
                     );
-                });
+                },
+            );
         }
 
         // Autoconfigurtion checks for bindings
         if (!isBound(ManifestAssembly.BuilderFactory)) {
-            bind<interfaces.Factory<ManifestBuilderFactory>>(ManifestAssembly.BuilderFactory)
-                .toFactory<Observable<void>>((ctx) => (url: string, id: string) => {
-
+            bind<interfaces.Factory<ManifestBuilderFactory>>(ManifestAssembly.BuilderFactory).toFactory<Observable<void>>(
+                (ctx) => (url: string, id: string) => {
                     const logger = inversifyOptionalGet<LoggerFactory>(ctx.container, LoggerAssembly.Factory)?.(LoggerTag.Manifest);
                     const builder = ctx.container.get<ManifestLoaderFactory>(ManifestAssembly.Factory)(url);
 
@@ -55,7 +53,8 @@ export const autoconfigure = (): ContainerModule => {
                         }),
                         concatMapTo(of<void>()),
                     );
-                });
+                },
+            );
         }
     });
 };
