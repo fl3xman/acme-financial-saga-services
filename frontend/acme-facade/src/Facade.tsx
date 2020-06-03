@@ -9,14 +9,13 @@ import { configuration as LoggerConfiguration } from "./configuration/LoggerConf
 import { configuration as MediatorConfiguration } from "./configuration/MediatorConfiguration";
 
 const container = new Container();
-container.load(LoggerConfiguration(), MediatorConfiguration());
 
 const Dashboard = () => <div>Dashboard</div>;
 const Payment = ({ history }: RouterProps) => <Mediator history={history} namespace="acme" name="payment" host="http://localhost:4001" />;
 
 export const Facade: React.FC = () => {
     return (
-        <InversifyProvider container={container}>
+        <InversifyProvider container={container} configurations={[LoggerConfiguration(), MediatorConfiguration()]}>
             <HashRouter>
                 <Switch>
                     <Route exact path="/" component={Dashboard} />

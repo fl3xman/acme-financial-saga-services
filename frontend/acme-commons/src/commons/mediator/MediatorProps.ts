@@ -1,3 +1,4 @@
+import * as React from "react";
 import * as H from "history";
 
 export interface MediatorProps {
@@ -5,4 +6,5 @@ export interface MediatorProps {
     name: string;
     host: string;
     history: H.History;
+    loader?: () => React.ReactElement;
 }

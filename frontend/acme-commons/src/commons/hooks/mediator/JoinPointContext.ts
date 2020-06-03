@@ -1,12 +1,10 @@
 import { JoinPointAware } from "./JoinPointAware";
 import { JoinPoint } from "./JoinPoint";
 
-export interface JoinPointContext {
-    [key: string]: JoinPointAware;
-}
-
 declare global {
-    interface Window extends JoinPointContext { }
+    interface Window {
+        [key: string]: JoinPointAware;
+    }
 }
 
 export const useJoinPoint = (namespace: string, name: string, point?: JoinPoint): JoinPoint => {

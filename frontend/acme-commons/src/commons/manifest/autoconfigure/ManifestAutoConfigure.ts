@@ -1,4 +1,4 @@
-import { Observable, defer, from, forkJoin, of } from "rxjs";
+import { Observable, defer, from, of, combineLatest } from "rxjs";
 import { concatMap, map, tap, concatMapTo } from "rxjs/operators";
 import { ContainerModule, interfaces } from "inversify";
 
@@ -46,9 +46,9 @@ export const autoconfigure = (): ContainerModule => {
 
                     return builder.pipe(
                         concatMap((manifest) => {
-                            return forkJoin(
-                                defaultStyleManifestBuilder({ url, id, manifest, logger }),
+                            return combineLatest(
                                 defaultScriptManifestBuilder({ url, id, manifest, logger }),
+                                defaultStyleManifestBuilder({ url, id, manifest, logger }),
                             );
                         }),
                         concatMapTo(of<void>()),
