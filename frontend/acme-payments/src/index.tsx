@@ -10,7 +10,6 @@ import { Payment } from "./Payment";
 useJoinPoint("acme", "payment", {
     mount: (id: string, history: H.History, container: interfaces.Container) => {
         ReactDOM.render(<Payment id={id} history={history} container={container} />, document.getElementById(id));
-        // registerServiceWorker();
     },
     unmount: (id) => {
         guard(document.getElementById(id), (safe) => ReactDOM.unmountComponentAtNode(safe));

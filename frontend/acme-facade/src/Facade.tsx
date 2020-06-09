@@ -19,7 +19,7 @@ export const Facade: React.FC = () => {
             <HashRouter>
                 <Switch>
                     <Route exact path="/" component={Dashboard} />
-                    <Route exact path="/payment" component={Payment} />
+                    <Route path="/payments" component={Payment} />
                 </Switch>
             </HashRouter>
         </InversifyProvider>

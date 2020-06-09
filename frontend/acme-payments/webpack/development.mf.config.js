@@ -1,4 +1,3 @@
-const WebpackAssetsManifest = require("webpack-assets-manifest");
 const common = require("./common.config");
 
 module.exports = () => {
@@ -18,15 +17,6 @@ module.exports = () => {
                 "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
                 "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
             }
-        },
-
-        plugins: [
-            ...common().plugins,
-
-            new WebpackAssetsManifest({
-                publicPath: true,
-                writeToFileEmit: true
-            })
-        ]
+        }
     }
 };

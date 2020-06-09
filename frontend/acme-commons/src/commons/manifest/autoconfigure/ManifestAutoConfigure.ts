@@ -1,5 +1,7 @@
-import { Observable, defer, from, of, combineLatest } from "rxjs";
+import { Observable, from, of, combineLatest } from "rxjs";
 import { concatMap, map, tap, concatMapTo } from "rxjs/operators";
+import { fromFetch } from "rxjs/fetch";
+
 import { ContainerModule, interfaces } from "inversify";
 
 import { keyTypeOf } from "../../boot";
@@ -20,7 +22,7 @@ export const autoconfigure = (): ContainerModule => {
             bind<interfaces.Factory<ManifestLoaderFactory>>(ManifestAssembly.Factory).toFactory<Observable<Manifest>>(
                 (ctx) => (host: string) => {
                     const logger = inversifyOptionalGet<LoggerFactory>(ctx.container, LoggerAssembly.Factory)?.(LoggerTag.Manifest);
-                    return defer(() => from(fetch(`${host}/manifest.json`))).pipe(
+                    return fromFetch(`${host}/manifest.json`).pipe(
                         concatMap((response) => from(from(response.json()))),
                         map((json) => {
                             if (keyTypeOf<Manifest, AnyManifestAttribute>(json, ManifestAttribute.MainScript)) {

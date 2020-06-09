@@ -1,5 +1,8 @@
+const WebpackAssetsManifest = require("webpack-assets-manifest");
 const Webpack = require("webpack");
-const { join, resolve } = require("path");
+
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const { resolve } = require("path");
 
 module.exports = () => {
     const base = {};
@@ -22,10 +25,15 @@ module.exports = () => {
         extensions: [".ts", ".tsx", ".js", ".json"],
     };
     base.plugins = [
+        new CleanWebpackPlugin(),
         new Webpack.DefinePlugin({
             "process.env": {
                 "LOGGER_LEVEL": "debug"
             }
+        }),
+        new WebpackAssetsManifest({
+            publicPath: true,
+            writeToFileEmit: true
         })
     ];
 
