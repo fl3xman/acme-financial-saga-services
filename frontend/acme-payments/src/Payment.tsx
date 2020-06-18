@@ -8,19 +8,19 @@ import { JoinPointRouter } from "./components/router";
 import { OrderCreate } from "./components/screens/order-create";
 import { OrderList } from "./components/screens/order-list";
 
-import { PaymentContractProvider } from "./contracts";
+import { ContractProvider } from "./contracts";
 
 export const Payment: React.FC<JoinPointProps> = ({ id, history, container }: JoinPointProps) => {
     return (
         <InversifyProvider id={id} container={container}>
-            <PaymentContractProvider mounted={!_.isNil(container)}>
+            <ContractProvider joined={!_.isNil(container)}>
                 <JoinPointRouter history={history}>
                     <Switch>
                         <Route exact path="/payments/create" component={OrderCreate} />
                         <Route exact path="/payments" component={OrderList} />
                     </Switch>
                 </JoinPointRouter>
-            </PaymentContractProvider>
+            </ContractProvider>
         </InversifyProvider>
     );
 };

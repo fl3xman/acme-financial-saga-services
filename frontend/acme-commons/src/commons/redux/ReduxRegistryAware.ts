@@ -1,14 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-interface ActionLike<T = any> {
+interface ActionAware<T = any> {
     type: T;
 }
 
-type AnyActionLike = ActionLike;
-type ReducerLike<S = any, A extends ActionLike = AnyActionLike> = (state: S | undefined, action: A) => S;
+type AnyActionAware = ActionAware;
+type ReducerAware<S = any, A extends ActionAware = AnyActionAware> = (state: S | undefined, action: A) => S;
 
 export interface ReduxRegistryAware {
-    readonly combinedReducers: ReducerLike;
-
-    add(name: string, reducer: ReducerLike): ReduxRegistryAware;
+    add(name: string, reducer: ReducerAware): ReduxRegistryAware;
     remove(name: string): ReduxRegistryAware;
 }

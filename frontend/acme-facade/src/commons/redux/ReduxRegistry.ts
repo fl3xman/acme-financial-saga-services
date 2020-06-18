@@ -20,10 +20,6 @@ export class ReduxRegistry implements ReduxRegistryAware {
         // no-body
     }
 
-    public get combinedReducers(): Reducer {
-        return combineReducers(this.reducers.value);
-    }
-
     public add(name: string, reducer: Reducer): ReduxRegistryAware {
         const reducers = { ...this.reducers.value, [name]: reducer };
         this.reducers.next(reducers);

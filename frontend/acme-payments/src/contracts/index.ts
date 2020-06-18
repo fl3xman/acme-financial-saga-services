@@ -1,3 +1,3 @@
 export * from "./PaymentContract";
 export * from "./PaymentType";
-export * from "./PaymentContractProvider";
+export * from "./ContractProvider";
