@@ -10,8 +10,9 @@ import { DashboardType, dashboardReducer } from "./dashboard";
 export const ContractProvider: React.FC<unknown> = (props: React.PropsWithChildren<unknown>) => {
     const container = useInversify();
     const registry = useReduxRegistry();
+    const store = container.get<Store>(ReduxStoreAssembly.Instance);
 
-    registry.add(DashboardType.Name, dashboardReducer);
+    registry?.add(DashboardType.Name, dashboardReducer);
 
-    return <Provider store={container.get<Store>(ReduxStoreAssembly.Instance)}>{props.children}</Provider>;
+    return <Provider store={store}>{props.children}</Provider>;
 };

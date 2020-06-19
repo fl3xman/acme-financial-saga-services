@@ -5,7 +5,7 @@ export const inversifyOptionalGet = <T>(
     serviceIdentifier: interfaces.ServiceIdentifier<T>,
     defaultValue?: T,
 ): T | undefined => {
-    if (container.isBound(serviceIdentifier) || !defaultValue) {
+    if (container.isBound(serviceIdentifier)) {
         return container.get(serviceIdentifier);
     } else {
         return defaultValue;

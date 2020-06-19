@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { OrderType, orderReducer } from "./orders";
 
-export const paymentReducer = combineReducers({
+export const rootReducer = combineReducers({
     [OrderType.Name]: orderReducer,
 });

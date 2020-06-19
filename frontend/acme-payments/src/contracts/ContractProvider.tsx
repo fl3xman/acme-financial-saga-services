@@ -1,21 +1,22 @@
 import * as React from "react";
+import * as _ from "lodash";
 
-import { createStore, combineReducers } from "redux";
+import { createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { Provider } from "react-redux";
 import { useReduxRegistry } from "acme-commons";
 
-import { PaymentType } from "./PaymentType";
-import { paymentReducer } from "./PaymentContract";
+import { RootType } from "./RootType";
+import { rootReducer } from "./RootContract";
 
-export const ContractProvider: React.FC<{ joined: boolean }> = (props: React.PropsWithChildren<{ joined: boolean }>) => {
-    if (props.joined) {
-        const registry = useReduxRegistry();
-        registry?.add(PaymentType.Name, paymentReducer);
+export const ContractProvider: React.FC = (props: React.PropsWithChildren<unknown>) => {
+    const registry = useReduxRegistry();
+    registry?.add(RootType.Name, rootReducer);
 
+    if (!_.isNil(registry)) {
         return <>{props.children}</>;
     }
 
-    const store = createStore(combineReducers({ [PaymentType.Name]: paymentReducer }), composeWithDevTools());
+    const store = createStore(rootReducer, composeWithDevTools());
     return <Provider store={store}>{props.children}</Provider>;
 };
