@@ -9,7 +9,7 @@ import { configuration as LoggerConfiguration } from "./configuration/LoggerConf
 import { configuration as MediatorConfiguration } from "./configuration/MediatorConfiguration";
 import { configuration as ReduxConfiguration } from "./configuration/ReduxConfiguration";
 
-import { ContractProvider } from "./contracts";
+import { ReduxProvider } from "./contracts";
 import { Dashboard } from "./components/screen/dashboard";
 
 const container = new Container();
@@ -20,7 +20,7 @@ const Account = ({ history }: RouterProps) => <Mediator history={history} namesp
 export const Facade: React.FC = () => {
     return (
         <InversifyProvider container={container} configurations={[LoggerConfiguration(), MediatorConfiguration(), ReduxConfiguration()]}>
-            <ContractProvider>
+            <ReduxProvider>
                 <HashRouter>
                     <Switch>
                         <Route exact path="/" component={Dashboard} />
@@ -28,7 +28,7 @@ export const Facade: React.FC = () => {
                         <Route path="/account" component={Account} />
                     </Switch>
                 </HashRouter>
-            </ContractProvider>
+            </ReduxProvider>
         </InversifyProvider>
     );
 };

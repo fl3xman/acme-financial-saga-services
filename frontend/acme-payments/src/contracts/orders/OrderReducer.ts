@@ -1,11 +1,11 @@
 import { Action } from "redux";
 
-import { OrderType } from "./OrderType";
+import { OrderActionType } from "./OrderActionType";
 import { OrderState } from "./OrderState";
 
-export const orderReducer = (state = { loading: false }, action: Action<OrderType>): OrderState => {
+export const orderReducer = (state = { loading: false }, action: Action<OrderActionType>): OrderState => {
     switch (action.type) {
-        case OrderType.Create:
+        case OrderActionType.Create:
             return { ...state, loading: true };
         default:
             return state;

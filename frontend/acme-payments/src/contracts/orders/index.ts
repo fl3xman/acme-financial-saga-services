@@ -1,3 +1,3 @@
-export * from "./OrderContract";
+export * from "./OrderReducer";
 export * from "./OrderState";
-export * from "./OrderType";
+export * from "./OrderActionType";

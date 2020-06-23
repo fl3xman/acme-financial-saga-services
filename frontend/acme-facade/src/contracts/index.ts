@@ -1,1 +1,1 @@
-export * from "./ContractProvider";
+export * from "./ReduxProvider";
